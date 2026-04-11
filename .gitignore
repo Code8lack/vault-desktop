@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# Tauri build output
+src-tauri/target/
+
+# Environment & secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.cert
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & crash dumps
+*.log
+*.dump
+erl_crash.dump
+src-tauri/vaultimate_security.log
+
+# Build output
+dist/
+build/
+/.svelte-kit
+/package
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Personal/sensitive assets
+Bruce.png
+Steve.png
+
+# Erlang
+*.beam
+*.ez
+rebar.lock
+
+# Core protocol logic
+src/lib/main-listener.js
