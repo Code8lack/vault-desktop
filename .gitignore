@@ -38,10 +38,6 @@ build/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Personal/sensitive assets
-Bruce.png
-Steve.png
-
 # Erlang
 *.beam
 *.ez
@@ -49,3 +45,10 @@ rebar.lock
 
 # Core protocol logic
 src/lib/main-listener.js
+
+# Personal/live vault icons — keep only the default placeholder
+static/icons/*
+!static/icons/default.png
+
+# Core launch architecture
+src-tauri/src/main.rs

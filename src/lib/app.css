@@ -1,0 +1,353 @@
+/* src/app.css */
+
+/* ===== GLOBALS ===== */
+
+/*.container{
+  background-image: radial-gradient(
+    circle at left,
+    #aaa 0%,
+    #08080a 100%
+  );
+}*/
+.container,
+  .menu-panel,
+    .sub-menu-panel,
+      .display-panel,
+        .separator-line,
+          .blocker-line-parent
+{
+background-color: var(--bg-primary);
+}
+
+button,
+  .btn,
+    .add-nav-kids,
+      .service,
+        .service-header,
+          .field-like,
+            .security-static,
+              .totp-button.btn,
+                .menu-item
+{
+background-color: var(--bg-secondary);
+}
+
+p, h1, h2, h3,
+  button, label, legend,
+    .btn,
+      .add-nav-kids,
+        .service,
+          .service-header,
+            .field-like,
+              .secret-block, 
+                .search-bar-mirror p,
+                    .search-bar input::placeholder,
+                      .menu-item,
+                        .menu-title,
+                          .delete-check p,
+                            .panel-close,
+                              .special .btn,
+                                .panel-buttons,
+                                  .text-input,
+                                    .modal-backup-viewport input,
+                                          .info-alert,
+                                            .status-list li,
+                                                 .label,
+                                                  .info-panel,
+                                                    .site-go-to,
+                                                      .score-label,
+                                                        .score-max,
+                                                          .code-displayed,
+                                                            .strength-hint,
+                                                              .top-label,
+                                                                .bottom-label,
+                                                                  .heat-label
+{
+color: var(--text-primary);
+}
+
+.result-item {
+color: var(--text-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar);
+}
+
+.search-bar input {
+  caret-color: var(--accent-1);
+}
+
+.timeout-grandparent,
+  .search-bar input,
+    .cog-trigger,
+     .site-go-to,
+      .add-nav-kids,
+        .menu-item,
+          .service,
+            .btn,
+              .security-static {
+    border:1px solid var(--border-primary);
+}
+
+.input,
+  .field-like,
+    .info-panel,
+      .nerd-stats,
+        .add-nav-parent,
+          .pre-auth-input,
+            .pre-auth-input .main-login button,
+              .info-alert
+{
+  border:1px solid var(--border-soft);
+}
+
+.secret-block label,
+  .note-label-parent,
+    .login label,
+      .site label,
+        .note label {
+  border-top: 1px solid var(--border-primary);
+}
+
+.sub-menu-panel {
+  border-right: 1px solid var(--border-soft);
+}
+
+.stats-banner,
+  .header-item,
+    .header-list,
+      .attempt-row,
+        .recover .modal h2
+{
+  border-bottom:1px solid var(--border-soft);
+}
+
+.menu-panel h2, .sub-menu-panel h2 {
+  border-bottom:1px solid var(--accent-1);
+}
+
+#new-master-password::placeholder,
+#confirm-master-password::placeholder, 
+#old-password-input::placeholder {
+  color: var(--accent-1);
+}
+
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 300;
+  height: 50px;
+  transform: translateY(0);
+  transition: all 0.03s ease-out;
+}
+.btn:active,
+ .add-nav-kids:active,
+  .cog-trigger:active,
+   .site-go-to:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 0 #0056b3;
+  background-color: #666;
+}
+
+.btn:hover,
+  .service:hover,
+    .add-nav-kids:hover,
+      .cog-trigger:hover,
+        .site-go-to:hover,
+          .field-like:hover {
+  background: var(--hover-btn);
+}
+
+.menu-item:hover {
+  background: var(--hover-menu);
+}
+
+.btn.danger:hover {
+  background: #BA3D3D;
+}
+.back-button-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 50ms ease, visibility 50ms ease;
+}
+.back-button-visible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition: opacity 300ms ease;
+}
+
+/* ================ INPUT ================= */
+
+input {
+  position: relative;
+  top: -40px;
+  height: 37px;/*ESSENTIAL: must move in inverse correlation with .master-input-container height*/
+  width: 255px;
+  font-size: 15px;
+  padding: 5px 10px 5px 0;
+  border-radius: 8px;
+  text-overflow: ellipsis;
+  background: rgba(245, 111, 39, 0.55);
+  background: rgba(39, 180, 245, 0.25);
+  margin-top: -5px;
+}
+
+input:focus {
+  outline: none;
+}
+
+/* ===== ROWS ===== */
+.row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  height: 60px;
+}
+.row button {
+  height: 45px;
+  width: 95px;
+  padding: 0 5px 0 0;
+  font-size: 0.9em;
+  font-weight: 350;
+}
+.row.non-list {
+  height: 100px;
+  margin-top: -20px;
+}
+.row.left {
+  justify-content: flex-start !important;
+  margin-bottom: -10px;
+}
+
+/* ===== DISPLAY PANEL / MODALS ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 18, 18, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 600ms ease;
+  cursor: pointer;
+}
+.overlay-non-clickable {
+  cursor: default;
+  pointer-events: auto;
+}
+.display-panel-order {
+  position: relative;
+  top: -475px;
+  z-index: 201;
+  width: 80%;
+  height: 60%;
+  margin: 0 auto;
+}
+.display-panel {
+  width: 90%;
+  min-width: 500px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  margin: -100px auto;
+  gap: 20px;
+}
+.panel-close {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  margin: 25px -15px 0 0;
+}
+.panel-close:hover {
+  color: mediumvioletred; 
+}
+.display-panel .panel-close {
+  margin-top: -35px;
+}
+.display-panel h2 {
+  margin: 0;
+  text-align: center;
+  font-weight: 300;
+}
+.panel-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.panel-buttons .btn {
+  padding-right: 20px;
+  font-size: 16px;
+  width: 150px;
+}
+.crud{
+  margin-top: -100px;
+  border-top:1px solid gray;
+  padding: 20px 0 0 0;
+}
+.crud .btn{
+  font-size: 15px;
+  width: 135px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------- SCROLLBAR --------------------*/
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+      background: #279CF5;
+  }
+
+/* ----------------------------------------- CSS SCOPING ----------------------------------------------- */
+
+[data-theme="strawberries-cream"] .result-item:hover,
+[data-theme="strawberries-cream"] .result-item.highlighted, /* Added theme scope here */
+[data-theme="strawberries-cream"] .pre-auth-input .main-login button:hover { /* Added theme scope here */
+  color: var(--bg-secondary) !important;
+  background: indianred;
+}
+
+
+
+[data-theme="brutalist"] .result-item:hover,
+[data-theme="brutalist"] .result-item.highlighted { /* Added theme scope here */
+  background-color: lightblue;
+}
