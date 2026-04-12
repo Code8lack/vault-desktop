@@ -18,11 +18,11 @@
 
 ### Auth Flow
 
-*(diagram)*
+![Auth Flow](docs/auth-flow.png)
 
 ### Event & Message Flow
 
-*(diagram)*
+![Event & Message Flow](docs/event-flow.png)
 
 ---
 
