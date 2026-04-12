@@ -10,7 +10,7 @@
 |---|---|
 | Frontend | Svelte, JavaScript, HTML, CSS |
 | Bridge | Tauri (Rust) |
-| Backend | Erlang (proprietary) |
+| Backend | Erlang (proprietary — authored by me, not included in this repository) |
 
 ---
 
