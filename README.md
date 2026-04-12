@@ -4,6 +4,8 @@
 
 ---
 
+[![LockStep Preview](docs/YTThumb.png)](https://youtu.be/NHFkl7IS-vM)
+
 ## Tech Stack
 
 | Layer | Technology |
