@@ -8,6 +8,13 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
   plugins: [sveltekit()],
   clearScreen: false,
+
+  // ---- added for vitest ----
+  test: {
+    environment: 'node',
+  },
+  // --------------------------
+
   server: {
     port: 1420,
     strictPort: true,
@@ -19,8 +26,7 @@ export default defineConfig(async () => ({
           port: 1421,
         }
       : {
-          // Explicitly define HMR port for local dev to avoid conflicts
-          port: 1421, 
+          port: 1421,
         },
     watch: {
       ignored: ["**/src-tauri/**"],
