@@ -67,6 +67,10 @@ function parsePasswordLiveUpdate(payload) {
   };
 }
 
+function parseListResult(jsonStr) {
+  return JSON.parse(jsonStr);
+}
+
 // ---------------------------------------------------------------------------
 
 describe('payload parsing — secret_result', () => {
@@ -98,6 +102,24 @@ describe('payload parsing — secret_result', () => {
     expect(parseSecretResult(payload)).toBeNull();
   });
 
+  it('produces an empty mask string when the secret is empty', () => {
+    const payload = 'secret_result:|user|site|note|icon|extra';
+    const result = parseSecretResult(payload);
+    expect(result.selectedSecretDisplay).toBe('');
+  });
+
+  it('returns null when the payload contains too many pipe-delimited fields', () => {
+    const payload = 'secret_result:pass|user|site|note|icon|extra|unexpected';
+    expect(parseSecretResult(payload)).toBeNull();
+  });
+
+  it('preserves a base64 icon string without corruption', () => {
+    const b64 = 'data:image/png;base64,iVBORw0KGgo=';
+    const payload = `secret_result:pass|user|site|note|${b64}|extra`;
+    const result = parseSecretResult(payload);
+    expect(result.selectedIconPath).toBe(b64);
+  });
+
 });
 
 describe('payload parsing — backup_config', () => {
@@ -127,8 +149,6 @@ describe('payload parsing — backup_config', () => {
     const result = parseBackupConfig('backup_config:true|60|s3|ep|user|pass|7|true');
     expect(result.encrypt).toBe(true);
   });
-
-  // append inside describe('payload parsing — backup_config', ...)
 
   it('handles a zero interval without producing NaN', () => {
     const result = parseBackupConfig('backup_config:true|0|s3|ep|user|pass|7|false');
@@ -180,22 +200,33 @@ describe('payload parsing — security_report', () => {
     expect(result.backup_msg).toBe(false);
   });
 
-  it('produces an empty mask string when the secret is empty', () => {
-    const payload = 'secret_result:|user|site|note|icon|extra';
-    const result = parseSecretResult(payload);
-    expect(result.selectedSecretDisplay).toBe('');
+  it('produces identical output from security_report_data and security_report_silent for the same input', () => {
+    const data   = 'security_report_data:92.0|active|true|1|none|✅ Backed up|ok';
+    const silent = 'security_report_silent:92.0|active|true|1|none|✅ Backed up|ok';
+    const resultData   = parseSecurityReport(data,   'security_report_data:');
+    const resultSilent = parseSecurityReport(silent, 'security_report_silent:');
+    expect(resultData).toEqual(resultSilent);
   });
 
-  it('returns null when the payload contains too many pipe-delimited fields', () => {
-    const payload = 'secret_result:pass|user|site|note|icon|extra|unexpected';
-    expect(parseSecretResult(payload)).toBeNull();
+  it('trims whitespace from nif_status in both report variants', () => {
+    const data   = 'security_report_data:90.0|  active  |true|1|none|✅ Backed up|ok';
+    const silent = 'security_report_silent:90.0|  active  |true|1|none|✅ Backed up|ok';
+    expect(parseSecurityReport(data,   'security_report_data:').nif_status).toBe('active');
+    expect(parseSecurityReport(silent, 'security_report_silent:').nif_status).toBe('active');
   });
 
-  it('preserves a base64 icon string without corruption', () => {
-    const b64 = 'data:image/png;base64,iVBORw0KGgo=';
-    const payload = `secret_result:pass|user|site|note|${b64}|extra`;
-    const result = parseSecretResult(payload);
-    expect(result.selectedIconPath).toBe(b64);
+  it('handles a zero rating without producing NaN in either variant', () => {
+    const data   = 'security_report_data:0|active|false|5|none|No backup|warn';
+    const silent = 'security_report_silent:0|active|false|5|none|No backup|warn';
+    expect(Number.isNaN(parseSecurityReport(data,   'security_report_data:').rating)).toBe(false);
+    expect(Number.isNaN(parseSecurityReport(silent, 'security_report_silent:').rating)).toBe(false);
+  });
+
+  it('parses totp_enabled as false when the field is not exactly "true"', () => {
+    const data   = 'security_report_data:80.0|active|false|2|none|✅ Backed up|ok';
+    const silent = 'security_report_silent:80.0|active|false|2|none|✅ Backed up|ok';
+    expect(parseSecurityReport(data,   'security_report_data:').totp_enabled).toBe(false);
+    expect(parseSecurityReport(silent, 'security_report_silent:').totp_enabled).toBe(false);
   });
 
 });
@@ -222,13 +253,11 @@ describe('payload parsing — password_live_update', () => {
     expect(result.feedbackMessage).toBe('Solid choice');
   });
 
-  // ---------------------------------------------------------------------------
+});
+
+// ---------------------------------------------------------------------------
 // Emoji in service names — known breaking scenario
 // ---------------------------------------------------------------------------
-
-function parseListResult(jsonStr) {
-  return JSON.parse(jsonStr);
-}
 
 describe('payload parsing — emoji in service names', () => {
 
@@ -255,7 +284,5 @@ describe('payload parsing — emoji in service names', () => {
     const result = parseListResult(payload);
     expect(result[0]).toBe('🔑🛡️MyService');
   });
-
-});
 
 });
