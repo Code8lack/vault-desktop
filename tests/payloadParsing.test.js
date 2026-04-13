@@ -222,4 +222,40 @@ describe('payload parsing — password_live_update', () => {
     expect(result.feedbackMessage).toBe('Solid choice');
   });
 
+  // ---------------------------------------------------------------------------
+// Emoji in service names — known breaking scenario
+// ---------------------------------------------------------------------------
+
+function parseListResult(jsonStr) {
+  return JSON.parse(jsonStr);
+}
+
+describe('payload parsing — emoji in service names', () => {
+
+  it('preserves an emoji at the start of a service name through JSON parsing', () => {
+    const payload = JSON.stringify(['🔑MyService', 'NormalService']);
+    const result = parseListResult(payload);
+    expect(result[0]).toBe('🔑MyService');
+  });
+
+  it('preserves an emoji in the middle of a service name through JSON parsing', () => {
+    const payload = JSON.stringify(['My🔑Service']);
+    const result = parseListResult(payload);
+    expect(result[0]).toBe('My🔑Service');
+  });
+
+  it('preserves an emoji service name through the secret_result pipe parser', () => {
+    const payload = 'secret_result:pass|🔑MyService|site|note|icon|extra';
+    const result = parseSecretResult(payload);
+    expect(result.selectedUsername).toBe('🔑MyService');
+  });
+
+  it('preserves a multi-emoji service name without truncation or corruption', () => {
+    const payload = JSON.stringify(['🔑🛡️MyService']);
+    const result = parseListResult(payload);
+    expect(result[0]).toBe('🔑🛡️MyService');
+  });
+
+});
+
 });
