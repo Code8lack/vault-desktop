@@ -128,6 +128,26 @@ describe('payload parsing — backup_config', () => {
     expect(result.encrypt).toBe(true);
   });
 
+  // append inside describe('payload parsing — backup_config', ...)
+
+  it('handles a zero interval without producing NaN', () => {
+    const result = parseBackupConfig('backup_config:true|0|s3|ep|user|pass|7|false');
+    expect(Number.isNaN(result.backupInterval)).toBe(false);
+    expect(result.interval_min).toBe(0);
+  });
+
+  it('produces NaN for retention when the retention field is non-numeric', () => {
+    const result = parseBackupConfig('backup_config:true|60|s3|ep|user|pass|none|false');
+    expect(Number.isNaN(result.retention)).toBe(true);
+  });
+
+  it('returns undefined for missing fields when the payload is truncated', () => {
+    const result = parseBackupConfig('backup_config:true|60|s3');
+    expect(result.username).toBeUndefined();
+    expect(result.password).toBeUndefined();
+    expect(result.encrypt).toBe(false);
+  });
+
 });
 
 describe('payload parsing — security_report', () => {
@@ -158,6 +178,24 @@ describe('payload parsing — security_report', () => {
     const noBackup = 'security_report_data:87.5|active|true|2|none|No backup|ok';
     const result = parseSecurityReport(noBackup, 'security_report_data:');
     expect(result.backup_msg).toBe(false);
+  });
+
+  it('produces an empty mask string when the secret is empty', () => {
+    const payload = 'secret_result:|user|site|note|icon|extra';
+    const result = parseSecretResult(payload);
+    expect(result.selectedSecretDisplay).toBe('');
+  });
+
+  it('returns null when the payload contains too many pipe-delimited fields', () => {
+    const payload = 'secret_result:pass|user|site|note|icon|extra|unexpected';
+    expect(parseSecretResult(payload)).toBeNull();
+  });
+
+  it('preserves a base64 icon string without corruption', () => {
+    const b64 = 'data:image/png;base64,iVBORw0KGgo=';
+    const payload = `secret_result:pass|user|site|note|${b64}|extra`;
+    const result = parseSecretResult(payload);
+    expect(result.selectedIconPath).toBe(b64);
   });
 
 });
