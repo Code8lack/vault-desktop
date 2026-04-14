@@ -15,8 +15,8 @@ export function parseAttackBatch(payload) {
     const fields = row.split('|');
     let origin = fields[2] || 'GUI';
     
-    // 🛡️ Logic to ensure we show CLI or GUI, NOT both
-    if (origin.toUpperCase().indexOf('CLI') !== -1) {
+  // 🛡️ Logic to ensure we show CLI or GUI, NOT both
+  if (origin.toUpperCase() === 'CLI') {
       origin = 'CLI';
     } else {
       origin = 'GUI';

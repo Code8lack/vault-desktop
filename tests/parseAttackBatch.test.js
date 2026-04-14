@@ -60,7 +60,7 @@ describe('parseAttackBatch()', () => {
 
   describe('origin normalisation', () => {
     it('normalises any CLI variant to "CLI"', () => {
-      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1|cli_session|MacBook');
+      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1|cli|MacBook');
       expect(result[0].location).toBe('CLI');
     });
 
@@ -70,6 +70,26 @@ describe('parseAttackBatch()', () => {
     });
 
     it('defaults to "GUI" when origin field is missing', () => {
+      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1||MacBook');
+      expect(result[0].location).toBe('GUI');
+    });
+
+    it('normalises a CLI string with surrounding whitespace to "GUI" as whitespace breaks the match', () => {
+      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1| CLI |MacBook');
+      expect(result[0].location).toBe('GUI');
+    });
+
+    it('normalises a numeric origin field to "GUI"', () => {
+      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1|42|MacBook');
+      expect(result[0].location).toBe('GUI');
+    });
+
+    it('normalises a special character origin field to "GUI"', () => {
+      const result = parseAttackBatch('attack_batch:12:00|192.168.1.1|@#$%|MacBook');
+      expect(result[0].location).toBe('GUI');
+    });
+
+    it('normalises an explicitly empty origin field to "GUI"', () => {
       const result = parseAttackBatch('attack_batch:12:00|192.168.1.1||MacBook');
       expect(result[0].location).toBe('GUI');
     });
