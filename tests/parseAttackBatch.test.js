@@ -110,6 +110,16 @@ describe('parseAttackBatch()', () => {
       const result = parseAttackBatch('attack_batch:12:00|192.168.1.1|GUI|');
       expect(result[0].device).toBe('Unknown');
     });
+
+    it('returns a fully unknown row when all fields are missing', () => {
+    const result = parseAttackBatch('attack_batch:|||');
+    expect(result[0]).toEqual({
+      time: 'Unknown',
+      ipAddress: 'Unknown',
+      location: 'GUI',
+      device: 'Unknown'
+    });
+  });
   });
 
 });

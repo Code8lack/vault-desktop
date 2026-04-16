@@ -168,6 +168,13 @@ describe('payload parsing — backup_config', () => {
     expect(result.encrypt).toBe(false);
   });
 
+  it('produces NaN for all numeric fields when the payload data is empty', () => {
+    const result = parseBackupConfig('backup_config:');
+    expect(Number.isNaN(result.backupInterval)).toBe(true);
+    expect(Number.isNaN(result.interval_min)).toBe(true);
+    expect(Number.isNaN(result.retention)).toBe(true);
+  });
+
 });
 
 describe('payload parsing — security_report', () => {
@@ -227,6 +234,18 @@ describe('payload parsing — security_report', () => {
     const silent = 'security_report_silent:80.0|active|false|2|none|✅ Backed up|ok';
     expect(parseSecurityReport(data,   'security_report_data:').totp_enabled).toBe(false);
     expect(parseSecurityReport(silent, 'security_report_silent:').totp_enabled).toBe(false);
+  });
+
+  it('produces NaN for rating when the rating field is missing', () => {
+    const payload = 'security_report_data:|active|true|2|none|✅ Backed up|ok';
+    const result = parseSecurityReport(payload, 'security_report_data:');
+    expect(Number.isNaN(result.rating)).toBe(true);
+  });
+
+  it('produces NaN for defcon_level when the defcon field is missing', () => {
+    const payload = 'security_report_data:87.5|active|true||none|✅ Backed up|ok';
+    const result = parseSecurityReport(payload, 'security_report_data:');
+    expect(Number.isNaN(result.defcon_level)).toBe(true);
   });
 
 });

@@ -53,6 +53,10 @@ describe('validateServiceName()', () => {
     it('rejects a service name that is only an emoji', () => {
       expect(validateServiceName('🔑').valid).toBe(false);
     });
+
+    it('rejects a service name with an emoji surrounded by whitespace', () => {
+      expect(validateServiceName(' 🔑 ').valid).toBe(false);
+    });
   });
 
 });

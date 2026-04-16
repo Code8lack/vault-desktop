@@ -92,6 +92,15 @@ describe('themes array', () => {
     }
   });
 
+  it('every theme CSS variable value is a non-empty string', () => {
+    for (const theme of themes) {
+      for (const [key, value] of Object.entries(theme.vars)) {
+        expect(typeof value).toBe('string');
+        expect(value.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
 });
 
 describe('applyTheme()', () => {
