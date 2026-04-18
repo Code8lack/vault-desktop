@@ -290,7 +290,7 @@ $: isHeaderList = selectedService === null && authMode === 'authenticated';
 
 $: if (selectedService === null) {
   listReady = false;
-  setTimeout(() => listReady = true, 1500);
+  tick().then(() => serviceListEl?.addEventListener('mousemove', onMouseMove));
 }
 
 // Reset copy-gate whenever the setup view is entered fresh
@@ -333,6 +333,11 @@ $: if (totpStatus === 'setup') {
 
 // ----------------------------- FUNCTIONS ---------------------------------- //
 
+
+function onMouseMove() {//inactive hover actions until mousemove
+  listReady = true;
+  serviceListEl?.removeEventListener('mousemove', onMouseMove);
+}
 
 function ratingColor(rating) {
   return rating >= 10 ? '#45D65D' : '#f59f27';
@@ -1388,12 +1393,12 @@ function focusInput(node, isVisible) {
     }
 
     const fields = [
-      targetService,
-      newUsername.trim(),
-      newPassword,
-      newWebsite.trim(),
-      newNote.trim().replace(/\n/g, '\\n'),
-      '' 
+      targetService ?? '',
+      newUsername?.trim() ?? '',
+      newPassword ?? '',
+      newWebsite?.trim() ?? '',
+      newNote?.trim() ?? '',
+      ''
     ];
 
     const command = editMode 
@@ -2290,7 +2295,7 @@ onDestroy(() => {
   <!-- ========================== SERVICE LIST ================================ -->
 
         {#if selectedService === null}
-          <div class="service-list-parent -webkit-scrollbar-thumb" bind:this={serviceListEl}>
+          <div class="service-list-parent -webkit-scrollbar-thumb" bind:this={serviceListEl} class:list-ready={listReady}>
             {#each sortedEntries as e}
               <div class="service-row">
                 <button
@@ -3715,6 +3720,11 @@ onDestroy(() => {
 
   /*—————————————————————————— MULTIPLE ITEMS —————————————————————————*/
 
+
+  :global(.service-list-parent:not(.list-ready) .service) {//inactive hover actions until mousemove
+    pointer-events: none;
+  }
+
   .service-list-parent {
     margin: -50px 0 20px; /*ESSENTIAL!*/
     width: 60%;
@@ -4653,16 +4663,6 @@ onDestroy(() => {
 } 
 
 /*================================= THE PERSISTENT ELEMENTS =====================================*/
-
-  .footer-wrapper {
-    position: absolute;
-    display: none;
-    border-top: 1px solid #666;
-    bottom: 0;
-    background: rgba(150, 150, 150, 0.2);
-    width: 100%;
-    height: 170px;
-  }
 
 
 /*------------------------------------ INFO/ERROR ---------------------------------------*/
