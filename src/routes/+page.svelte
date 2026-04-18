@@ -1142,7 +1142,8 @@ function focusInput(node, isVisible) {
         authMode = 'authenticated';
         sendToBackend('get_entries');
       }
-      
+      await tick();
+      document.getElementById('search-vault')?.focus();
     } catch (error) {
       console.error('Failed to acknowledge login attempt:', error);
     }
@@ -3721,7 +3722,7 @@ onDestroy(() => {
   /*—————————————————————————— MULTIPLE ITEMS —————————————————————————*/
 
 
-  :global(.service-list-parent:not(.list-ready) .service) {//inactive hover actions until mousemove
+  :global(.service-list-parent:not(.list-ready) .service) {/*inactive hover actions until mousemove*/
     pointer-events: none;
   }
 
