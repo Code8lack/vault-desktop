@@ -180,6 +180,7 @@
   let flashingBtn = null; // holds the id string of the button currently flashing
   let serviceListEl;
   let listReady = false;
+  let backupError = ''; 
 
   const dispatch = createEventDispatcher();
   const CYCLE_TIME_MS = 3000;
@@ -1393,27 +1394,28 @@ function focusInput(node, isVisible) {
     
     // 2. Force UI transition immediately
     setAuthenticated();
-    infoMessage = '⚠️ Vault Unlocked. Please set a new password to persist.';
+    setMessage('⚠️ Vault Unlocked. Please set a new password to persist.', false, false);
     clearMessages(); 
   }
 
   async function startBackup() {
     try {
       isBackingUp = true;
-      infoMessage = 'Backing up...';
+      setMessage('Backing up...', false, false);
       errorMessage = '';
+      backupError = '';
 
       await sendToBackend('backup');
       setMessage('✅ Backup secured (Local & Cloud triggered).', false, false);
     } catch (err) {
       console.error('Backup failed:', err);
-      errorMessage = err?.message || 'Backup failed — check logs';
+      backupError = err?.message || 'Backup failed — check logs';
       infoMessage = '';
 
       if (err?.message?.includes('session_expired')) {
-        errorMessage = 'Session expired — please log in again';
+        backupError = 'Session expired — please log in again';
       } else if (err?.message?.includes('timeout')) {
-        errorMessage = 'Backup timed out — try again';
+        backupError = 'Backup timed out — try again';
       }
 
     } finally {
@@ -2320,12 +2322,12 @@ onDestroy(() => {
             aria-label="Backup Database"
             disabled={isBackingUp}
             on:click={startBackup}
-            class:error={!!errorMessage}
+            class:error={!!backupError }
             class:success={typeof infoMessage === 'string' && infoMessage.includes('✅')}
           >
             {#if isBackingUp}
               ⏳
-            {:else if errorMessage}
+            {:else if backupError}
               ⚠️
             {:else}
               ☁️
