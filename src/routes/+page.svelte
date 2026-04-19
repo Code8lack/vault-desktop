@@ -264,7 +264,6 @@ $: headerAdjusted = (authMode === 'authenticated' && selectedService !== null);
 $: headerListAdjusted = (authMode === 'authenticated' && selectedService == null);
 
 // Reactive search logic: filter sortedEntries if searchTerm is 2+ chars
-
 $: searchResults = searchTerm.trim().length >= 1
   ? [
       ...sortedEntries
@@ -361,6 +360,20 @@ $: if (totpStatus === 'setup') {
       showNerdPanel = !showNerdPanel;
       localStorage.setItem('nerdPanelActive', String(showNerdPanel));
       setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false);
+    },
+    openRecoveryCode: async () => {
+      isGeneratingBackup = true;
+      backupCode = '';
+      displayPanelTitle = 'High Entropy Recovery Code';
+      displayPanel = true;
+      try {
+        await invoke('dispatch_to_erlang', {
+          message: 'security:generate_backup_code'
+        });
+      } catch (err) {
+        errorMessage = 'Failed to request recovery code';
+        isGeneratingBackup = false;
+      }
     },
   });
 

@@ -12,6 +12,7 @@ export function createMenuItems({
   showLockBgPicker,
   showBackupModal,
   openImportPicker,
+  openRecoveryCode,
   startBatchUpdate,
   setDisplayPanel,
   setShowThemePicker,
@@ -29,13 +30,12 @@ export function createMenuItems({
     { label: '🦾 Change Password',        action: () => startChange() },
     { label: '🫙 Silo Mode',             action: () => triggerSecurityAction('in_secure') },
     { label: '⏱️ Timeout',               action: () => openTimeoutSettings() },
-    { label: '🔑 Recovery Code',          action: () => { displayPanel = true; } },
-    { label: '🔑 Recovery Code',          action: () => setDisplayPanel(true) },
     { label: '🎨 Themes',                 action: () => setShowThemePicker(true) },
     { label: '🏞️ Lock Screen Background', action: () => setShowLockBgPicker(true) },
     { label: '☁️ Backup Settings',        action: () => { setShowBackupModal(true); } },
     { label: '⤵️ Import',                action: () => openImportPicker() },
     { label: '🪣 Batch Update Icons',     action: () => startBatchUpdate() },
     { label: '🧠 Nerd Stats', action: () => toggleNerdPanel() },
+    { label: '🔑 Recovery Code', action: () => openRecoveryCode() },
   ];
 }
