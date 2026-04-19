@@ -60,7 +60,7 @@
                 on:mouseleave={() => { hoveredIndex = -1; }}
                 on:mousedown|preventDefault={() => dispatch('select', result)}
               >
-                {result}
+              {result.label}
               </button>
             {/each}
           </div>

@@ -21,6 +21,8 @@
   import '../lib/app.css';
   import LockScreenContrastToggle from '../lib/LockScreenContrastToggle.svelte';
   import { tick } from 'svelte';
+  import { createMenuItems } from '$lib/menuItems.js';
+
   
   export let serviceName: string;
 
@@ -262,10 +264,16 @@ $: headerAdjusted = (authMode === 'authenticated' && selectedService !== null);
 $: headerListAdjusted = (authMode === 'authenticated' && selectedService == null);
 
 // Reactive search logic: filter sortedEntries if searchTerm is 2+ chars
-$: searchResults = searchTerm.trim().length >= 1 
-  ? sortedEntries.filter(service => 
-      service.toLowerCase().includes(searchTerm.toLowerCase())
-    ) 
+
+$: searchResults = searchTerm.trim().length >= 1
+  ? [
+      ...sortedEntries
+        .filter(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map(s => ({ type: 'service', label: s })),
+      ...menuItems
+        .filter(m => m.label.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map(m => ({ type: 'menu', label: m.label, action: m.action })),
+    ]
   : [];
 
 $: if (!showSearchModal) {
@@ -329,6 +337,32 @@ $: if (totpStatus === 'setup') {
       if (input) input.focus();
     }
   };
+
+  const menuItems = createMenuItems({
+    openAddEntry,
+    showAddEntryPanel,
+    openMenu,
+    toggleSubMenu,
+    lockVault,
+    triggerSecurityAction,
+    startChange,
+    openTimeoutSettings,
+    displayPanel,
+    showThemePicker,
+    showLockBgPicker,
+    showBackupModal,
+    openImportPicker,
+    startBatchUpdate,
+    setDisplayPanel: (v) => { displayPanel = v; },
+    setShowThemePicker: (v) => { showThemePicker = v; },
+    setShowLockBgPicker: (v) => { showLockBgPicker = v; },
+    setShowBackupModal: (v) => { showBackupModal = v; },
+    toggleNerdPanel: () => {
+      showNerdPanel = !showNerdPanel;
+      localStorage.setItem('nerdPanelActive', String(showNerdPanel));
+      setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false);
+    },
+  });
 
 
 // ----------------------------- FUNCTIONS ---------------------------------- //
@@ -1044,11 +1078,18 @@ function focusInput(node, isVisible) {
 
   async function processSelection(selected) {
     if (!selected) return;
-    selectedService = selected;
+    if (selected.type === 'menu') {
+      selected.action();
+      showSearchModal = false;
+      searchTerm = '';
+      return;
+    }
+    // service selection unchanged ↓
+    selectedService = selected.label;
     selectedSecret = null;
     showSearchModal = false;
-    searchTerm = "";
-    await sendToBackend(`get_secret:${selected}`);
+    searchTerm = '';
+    await sendToBackend(`get_secret:${selected.label}`);
     clearMessages();
   }
 

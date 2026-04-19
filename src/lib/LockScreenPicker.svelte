@@ -40,7 +40,7 @@
 </script>
 
 <div class="display-panel lock-bg-panel">
-  <button class="panel-close" type="button" aria-label="Close panel" on:click={close()}
+  <button class="panel-close" type="button" aria-label="Close panel" on:click={close}
 >✕</button>
   <h2>Lock Screen Background</h2>
 
