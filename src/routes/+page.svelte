@@ -22,6 +22,7 @@
   import LockScreenContrastToggle from '../lib/LockScreenContrastToggle.svelte';
   import { tick } from 'svelte';
   import { createMenuItems } from '$lib/menuItems.js';
+  import { calculateEntropy, calculateStrengthScore } from '$lib/MetricsEngine.js';
 
   
   export let serviceName: string;
@@ -180,7 +181,8 @@
   let flashingBtn = null; // holds the id string of the button currently flashing
   let serviceListEl;
   let listReady = false;
-  let backupError = ''; 
+  let backupError = '';
+  let selectedEntropy = 0;
 
   const dispatch = createEventDispatcher();
   const CYCLE_TIME_MS = 3000;
@@ -216,16 +218,11 @@ $: _ = errorMessage;
 
 $: {
   if (selectedSecretRaw) {
-      // Simple entropy calculation: (Length * 0.5) + (Variety Bonus)
-      const len = selectedSecretRaw.length;
-      const variety = (/[A-Z]/.test(selectedSecretRaw) ? 1.5 : 0) + 
-                      (/[0-9]/.test(selectedSecretRaw) ? 1.5 : 0) + 
-                      (/[^A-Za-z0-9]/.test(selectedSecretRaw) ? 2 : 0);
-      
-      // Ensure the final score is clamped between 0 and 10 for your /2 divider
-      selectedStrengthScore = Math.min(10, (len * 0.4) + variety);
+      selectedStrengthScore = calculateStrengthScore(selectedSecretRaw);
+      selectedEntropy = calculateEntropy(selectedSecretRaw);
   } else {
       selectedStrengthScore = 0;
+      selectedEntropy = 0;
   }
 }
 
@@ -2525,24 +2522,24 @@ onDestroy(() => {
                 </button>
             </div>
           {/if}
+            {#if showNerdPanel}
+              <div class="nerd-stats">
+                <div class="stats-banner">
+                  <div class="label">Nerd Stats</div>
+                  <button class="menu-close" on:click={() => {/*...existing logic...*/}}>✕</button>
+                </div>
 
-          {#if showNerdPanel}
-            <div class="nerd-stats">
-              <div class="stats-banner">
-                <div class="label">Stats</div>
-                <button class="menu-close"
-                  aria-label="Close menu"
-                  on:click={() => {
-                  showNerdPanel = false;
-                  localStorage.setItem('nerdPanelActive', 'false');
-                  setMessage("🧠 Nerd Stats Inactive.", false, false)
-                  }}
-                >
-                ✕
-                </button>
-              </div>
-                <div class="heat-stack-container">
-                  <div class="label">Password strength</div>
+                <div class="nerd-data-row" style="--t-count: 4; --t-height: 25px; --t-speed: 8s;">
+                  
+                  <div class="v-ticker label">
+                    <div class="v-ticker-wrapper">
+                      <span>Rating</span>
+                      <span></span>
+                      <span>Entropy</span>
+                      <span></span>
+                      <span>Rating</span>
+                    </div>
+                  </div>
 
                   <div class="heat-stack">
                     {#each heatStack as color}
@@ -2550,10 +2547,19 @@ onDestroy(() => {
                     {/each}
                   </div>
 
-                  <div class="heat-label">{(selectedStrengthScore / 2).toFixed(1)} / 5</div>
+                  <div class="v-ticker heat-label">
+                    <div class="v-ticker-wrapper">
+                      <span>{(selectedStrengthScore / 2).toFixed(1)} / 5</span>
+                      <span></span>
+                      <span>{selectedEntropy || 0} Bits</span>
+                      <span></span>
+                      <span>{(selectedStrengthScore / 2).toFixed(1)} / 5</span>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
-          {/if}
+            {/if}
         </div><!--fields-container CLOSE-->          
       {/if} 
 
@@ -3641,6 +3647,8 @@ onDestroy(() => {
     background: var(--bg-fields);
   }
 
+
+
   /*===================== WRAPPERS =====================*/
 
   .header-wrapper-parent {
@@ -4232,49 +4240,30 @@ onDestroy(() => {
     font-size: 1em;
   }
 
-  .heat-stack-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    margin: 16px 5px;
-    font-family: Fixedsys, monospace;
-    font-weight: 100;
-  }
-
-   .heat-stack-container .label{/*Password Strength*/
-    background: rgba(75, 75, 75, 0.2);
-    border: 1px solid #555;
-    border-radius: 6px;       
-    margin: 0 25px 0 10px;
-    padding: 3px;
-    font-size: 12px;
-    width: 50%;
-    position: absolute;
-    left:0;
-  }
-
    .label{
       font-family: Fixedsys, monospace;
-      /*color: rgba(66, 245, 39, 1);*/
       margin-top: 5px;
    }
 
   .heat-stack {
     position: absolute;
-    right: 0;
-    margin: 0px 10px;
+    right: 10px;
+    top: 50px;
     display: flex;
     flex-direction: column-reverse;
-    height: 55px;         
+    height: 60px;         
     width: 35px; 
     border: 1px solid #555;        
     border-radius: 6px;
     overflow: hidden;
     padding: 2px;
     background: transparent;/*==========================================================ESSENTIAL*/
-    /*box-shadow: 0 2px 8px rgba(0,0,0,0.4);*/
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     gap: 2px;
+  }
+
+  nerd-data-row.label {
   }
 
   .bar {
@@ -4285,18 +4274,63 @@ onDestroy(() => {
     border-radius: 1px;
   }
 
+  /* ================== Generalized vertical slider for DRY reuse ================ */
+
+  .nerd-data-row {
+    margin: 10px 0 0 15px;
+  }
+
   .heat-label {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    margin: 0 35px 5px;
-    font-size: 12px;
+    bottom: 10px;
+    left: 15px;
+  }
+
+  .heat-label, .nerd-data-row {
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    border: 1px solid #555;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
     font-weight: 500;
     font-family: monaco, monospace;
     letter-spacing: -0.9px;
-    text-align: center;
+    width: 50%;
+    height: 25px; /* Match --t-height */
+    overflow: hidden;
   }
 
+  .v-ticker {
+    height: var(--t-height);
+    overflow: hidden;
+    flex: 1; /* Allows labels and values to take up available space */
+    align-items: flex-start !important;
+  }
+
+  .v-ticker-wrapper {
+    display: flex;
+    flex-direction: column;
+    animation: v-slide var(--t-speed) linear infinite;
+  }
+
+  .v-ticker-wrapper > span {
+    height: var(--t-height);
+    line-height: var(--t-height);
+    white-space: nowrap;
+  }
+
+  /* Right-align the values ticker for a cleaner look */
+  .heat-label.v-ticker .v-ticker-wrapper > span {
+    text-align: right;
+    display: block;
+  }
+
+  @keyframes v-slide {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(calc(-1 * var(--t-count) * var(--t-height))); }
+  }
 
 /* ==================================== BACKUP CODE ======================================= */
 
