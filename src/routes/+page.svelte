@@ -348,6 +348,7 @@ $: if (totpStatus === 'setup') {
     showThemePicker,
     showLockBgPicker,
     showBackupModal,
+    handleExport,
     openImportPicker,
     startBatchUpdate,
     setDisplayPanel: (v) => { displayPanel = v; },
@@ -1048,14 +1049,16 @@ function focusInput(node, isVisible) {
 //---------------------------------------------- ASYNCs ----------------------------------------------
   
 
-  async function handleExport() {
-    try {
-      const savePath = await invoke('open_save_dialog_csv');
-      await invoke('dispatch_to_erlang', { message: `export_csv:${savePath}` });
-    } catch (e) {
-      // User cancelled the dialog — nothing to do
-    }
+async function handleExport() {
+  try {
+    const savePath = await invoke('open_save_dialog_csv');
+    closeMenu();
+    await tick(); // ← let Svelte re-render with menu gone before dispatch
+    await invoke('dispatch_to_erlang', { message: `export_csv:${savePath}` });
+  } catch (e) {
+    // User cancelled the native save dialog — leave menu as-is
   }
+}
 
 async function recoverWithPassword() {
     if (!password) {
