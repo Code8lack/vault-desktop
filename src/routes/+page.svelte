@@ -1048,7 +1048,16 @@ function focusInput(node, isVisible) {
 //---------------------------------------------- ASYNCs ----------------------------------------------
   
 
-  async function recoverWithPassword() {
+  async function handleExport() {
+    try {
+      const savePath = await invoke('open_save_dialog_csv');
+      await invoke('dispatch_to_erlang', { message: `export_csv:${savePath}` });
+    } catch (e) {
+      // User cancelled the dialog — nothing to do
+    }
+  }
+
+async function recoverWithPassword() {
     if (!password) {
         errorMessage = 'Password is required';
         return;
@@ -2529,7 +2538,7 @@ onDestroy(() => {
                   <button class="menu-close" on:click={() => {/*...existing logic...*/}}>✕</button>
                 </div>
 
-                <div class="nerd-data-row" style="--t-count: 4; --t-height: 25px; --t-speed: 8s;">
+                <div class="nerd-data-row" style="--t-count: 4; --t-height: 25px; --t-speed: 10s;">
                   
                   <div class="v-ticker label">
                     <div class="v-ticker-wrapper">
@@ -2751,6 +2760,7 @@ onDestroy(() => {
                     </button>                    
                     <button
                       class="menu-item"
+                      on:click={() => { handleExport() }}
                     >
                       ⤴️ Export
                     </button>
