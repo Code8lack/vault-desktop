@@ -4248,8 +4248,8 @@ onDestroy(() => {
 
   .nerd-stats button{
     position: absolute;
-    top: -10px;
-    right: -5px;
+    top: -5px;
+    right: 0px;
     font-size: 1em;
   }
 
