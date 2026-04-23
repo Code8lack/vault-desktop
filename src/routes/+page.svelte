@@ -762,7 +762,6 @@ function focusInput(node, isVisible) {
       // Trigger the delayed masking for the newly added character
       startMasking();
     } else if (newValue.length < password.length) {
-      // CHARACTERS REMOVED
       password = password.slice(0, newValue.length);
       displayPassword = dot.repeat(password.length);
       
