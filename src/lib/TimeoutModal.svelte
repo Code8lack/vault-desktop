@@ -35,6 +35,7 @@
     const timeoutMs = minutes * 60000;
     sendToBackend(`reset_timeout:${timeoutMs}`);
     timeoutError = '';
+    setMessage(`🕟 Timeout set for ${minutes} minutes.`, false, false);
     onclose();
   }
 </script>
