@@ -183,19 +183,7 @@
   let listReady = false;
   let backupError = '';
   let selectedEntropy = 0;
-
-  const dispatch = createEventDispatcher();
-  const CYCLE_TIME_MS = 3000;
-  const DEFAULT_MSG_DURATION = 5000;
-  const HEAT_PALETTE = {
-    OFF: '#333',
-    RED: 'indianred',
-    ORANGE: '#ffa500',
-    YELLOW: '#ffff00',
-    L_GREEN: '#D4BC5B',
-    D_GREEN: '#5F9431'
-  };
-
+  let persistentError = false;
 
 //=============================== REACTIVES =========================================//
 
@@ -309,9 +297,22 @@ $: if (totpStatus === 'setup') {
   prevAuthMode = authMode;
   prevSelectedService = selectedService;
 
+  const dispatch = createEventDispatcher();
+  const CYCLE_TIME_MS = 3000;
+  const DEFAULT_MSG_DURATION = 5000;
+  const HEAT_PALETTE = {
+    OFF: '#333',
+    RED: 'indianred',
+    ORANGE: '#ffa500',
+    YELLOW: '#ffff00',
+    L_GREEN: '#D4BC5B',
+    D_GREEN: '#5F9431'
+  };
+
   const AUTH_TIMEOUT_MS = 500000; // frontend watchdog
-  const isAuthenticated = () => authMode === 'authenticated';
-  const MASK_DELAY_MS = 1500;
+    const isAuthenticated = () => authMode === 'authenticated';
+    const MASK_DELAY_MS = 1500;
+
   const handleForgotPassword = () => {
     authMode = 'recovery';
     errorMessage = '';
@@ -701,8 +702,10 @@ function focusInput(node, isVisible) {
 // 🧠 Refined Message Controller
   function setMessage(msg, isPersistent = false, isError = false) {
     if (isError) {
+      infoMessage = '';
       clearTimeout(errorTimer);
       errorMessage = msg;
+      persistentError = isPersistent;
     } else {
       clearTimeout(msgTimer);
       infoMessage = msg;
@@ -1019,7 +1022,7 @@ function focusInput(node, isVisible) {
 
   function setAuthenticated() {
     authMode = 'authenticated';
-    infoMessage = 'Vault unlocked';
+    setMessage('Vault unlocked.', false, false);
   }
 
   function globalEnterHandler(e: KeyboardEvent) {
@@ -1048,28 +1051,15 @@ function focusInput(node, isVisible) {
 //---------------------------------------------- ASYNCs ----------------------------------------------
   
 
-async function handleExport() {
-  try {
-    const savePath = await invoke('open_save_dialog_csv');
-    closeMenu();
-    await tick(); // ← let Svelte re-render with menu gone before dispatch
-    await invoke('dispatch_to_erlang', { message: `export_csv:${savePath}` });
-  } catch (e) {
-    // User cancelled the native save dialog — leave menu as-is
-  }
-}
-
-async function recoverWithPassword() {
-    if (!password) {
-        errorMessage = 'Password is required';
-        return;
-    }
-    setMessage('Verifying ...', false, false);
-    errorMessage = '';
+  async function handleExport() {
     try {
-        await invoke('dispatch_to_erlang', { message: `recover_with_password:${password}` });
-    } catch (err) {
-        errorMessage = 'Recovery failed: ' + err;
+      const savePath = await invoke('open_save_dialog_csv');
+      closeMenu();
+      await tick(); // ← let Svelte re-render with menu gone before dispatch
+      await invoke('dispatch_to_erlang', { message: `export_csv:${savePath}` });
+    } catch (e) {
+      // User cancelled the native save dialog — leave menu as-is
+      setMessage('❌ Export cancelled.', false, true);
     }
   }
 
@@ -1086,7 +1076,21 @@ async function recoverWithPassword() {
       }
     } catch (err) {
       console.error('[IMPORT] Picker error:', err);
-      errorMessage = 'Import cancelled.';
+      setMessage('❌ Import cancelled.', false, true);
+    }
+  }
+
+  async function recoverWithPassword() {
+    if (!password) {
+        errorMessage = 'Password is required';
+        return;
+    }
+    setMessage('Verifying ...', false, false);
+    errorMessage = '';
+    try {
+        await invoke('dispatch_to_erlang', { message: `recover_with_password:${password}` });
+    } catch (err) {
+        errorMessage = 'Recovery failed: ' + err;
     }
   }
 
@@ -1199,6 +1203,8 @@ async function recoverWithPassword() {
       
       showLoginAttemptPanel = false;
       hotZone = false;  // ⚠️ Release the lock
+      infoMessage = '';
+      persistentInfo = false;
       
       // ⚠️ If user was authenticated before the alert, return to authenticated state
       if (password) {
@@ -1243,7 +1249,7 @@ async function recoverWithPassword() {
 
   async function verifyPassword() {
     if (!password) return;
-    setMessage('Verifying ...', false, false);
+    setMessage('🔎 Verifying ...', false, false);
     errorMessage = '';
     startAuthWatchdog();
     await sendToBackend(`auth:${password}`);
@@ -1281,7 +1287,6 @@ async function recoverWithPassword() {
         errorMessage = 'No website or service selected.';
         return;
     }
-    setMessage('Verifying ...', false, false);
     await sendToBackend(`fetch_favicon:${selectedService}|${selectedWebsite}`);
   }
 
@@ -1299,7 +1304,7 @@ async function recoverWithPassword() {
       }
     } catch (err) {
       console.error('File picker error:', err);
-      errorMessage = 'File picker cancelled.';
+      setMessage('❌ File picker cancelled.', false, false);
     }
   }
 
@@ -1352,7 +1357,7 @@ async function recoverWithPassword() {
         return;
     }
 
-    setMessage('Verifying recovery code...'), false, false;
+    setMessage('Verifying recovery code...', false, false);
     errorMessage = '';
     
     try {
@@ -1384,7 +1389,6 @@ async function recoverWithPassword() {
     }
   }
 
-  // 3. The Forced Action
   async function applyRecoveryPasswordForced() {
       if (!newPasswordDisplay) return;
       errorMessage = '';
@@ -1453,7 +1457,7 @@ async function recoverWithPassword() {
   async function submitNewEntry() {
     const targetService = newServiceName.trim();
     if (!targetService) {
-      if (typeof setMessage === 'function') setMessage('Service name is required.', true);
+      if (typeof setMessage === 'function') setMessage('Service name is required.', true, false);
       return;
     }
 
@@ -1490,7 +1494,6 @@ async function recoverWithPassword() {
       }
 
     await tick();
-
     const maxWait = 1500;
     const interval = 50;
     let elapsed = 0;
@@ -1517,7 +1520,7 @@ async function recoverWithPassword() {
 
     } catch (err) { 
       if (typeof setMessage === 'function') {
-        setMessage(`Error: ${err}`, true);
+        setMessage(`Error: ${err}`, true, true);
       }
     }
   }
@@ -1832,7 +1835,7 @@ onMount(async () => {
         ? payload.split(':')[1] 
         : (payload || 'Vault Locked.');
         
-    setMessage(reason, true);
+    setMessage(reason, true, false);
   });
 
 unlistenError = await listen('gui_error', (event) => {
@@ -2869,7 +2872,7 @@ onDestroy(() => {
 <!-- ================= PERSISTENT INFO + Z-INDEXED MODALS HIGHER THAN CONTAINER DIV ================= -->
 
 <div class="message-container" class:totp-open={showTotpModal}>
-  {#key errorMessage || infoMessage}
+  {#key `${errorMessage}|${infoMessage}`}
     {#if errorMessage}
       <!-- out/in transitions now overlap cleanly -->
       <div class="error" transition:fade={{ duration: 300 }}>{errorMessage}</div>
