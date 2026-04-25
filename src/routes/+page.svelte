@@ -23,6 +23,8 @@
   import { tick } from 'svelte';
   import { createMenuItems } from '$lib/menuItems.js';
   import { calculateEntropy, calculateStrengthScore } from '$lib/MetricsEngine.js';
+  import { categories } from '$lib/categoryStore.js';
+  import CategoryModal from '$lib/CategoryModal.svelte';
 
   
   export let serviceName: string;
@@ -184,6 +186,8 @@
   let backupError = '';
   let selectedEntropy = 0;
   let persistentError = false;
+  let showCategoryModalOpen = false;
+
 
 //=============================== REACTIVES =========================================//
 
@@ -327,6 +331,7 @@ $: if (totpStatus === 'setup') {
 
   // Global focus handler for pre-auth inputs
   const handleGlobalKeyDown = (e) => {
+    if (showCategoryModalOpen) return;
     const active = document.activeElement;
     const isInput = active.tagName === 'INPUT' || active.tagName === 'TEXTAREA';
     // Ignore if already in an input or if a modifier key (Cmd/Ctrl) is pressed
@@ -348,6 +353,7 @@ $: if (totpStatus === 'setup') {
     displayPanel,
     showThemePicker,
     showLockBgPicker,
+    showCategoryModal,
     showBackupModal,
     handleExport,
     openImportPicker,
@@ -380,6 +386,10 @@ $: if (totpStatus === 'setup') {
 
 // ----------------------------- FUNCTIONS ---------------------------------- //
 
+
+function showCategoryModal() {
+  showCategoryModalOpen = true;
+}
 
 function onMouseMove() {//inactive hover actions until mousemove
   listReady = true;
@@ -462,34 +472,6 @@ function persistentFocus(node, isBlocked) {
   };
 }
 
-function focusInput(node, isVisible) {
-    const handleGlobalFocus = (event) => {
-      // If modal is active and focus moves to something that isn't our input
-      if (isVisible && event.target !== node) {
-        node.focus();
-      }
-    };
-
-    if (isVisible) {
-      node.focus();
-      document.addEventListener('focusin', handleGlobalFocus);
-    }
-
-    return {
-      update(newVisible) {
-        isVisible = newVisible;
-        if (isVisible) {
-          node.focus();
-          document.addEventListener('focusin', handleGlobalFocus);
-        } else {
-          document.removeEventListener('focusin', handleGlobalFocus);
-        }
-      },
-      destroy() {
-        document.removeEventListener('focusin', handleGlobalFocus);
-      }
-    };
-  }
 
   function syncState(updatedOptions) {
     authMode = updatedOptions.authMode;
@@ -2349,7 +2331,7 @@ onDestroy(() => {
               id="search-vault"
               type="text"
               bind:value={searchTerm}
-              use:persistentFocus={modalOpen}
+              use:persistentFocus={modalOpen || showCategoryModalOpen}
               on:input={() => { if (searchTerm.trim()) showSearchModal = true; }}
               on:keydown={handleSearchKeydown}
               placeholder="&nbsp;Enter search term"
@@ -2840,7 +2822,13 @@ onDestroy(() => {
                       on:click={() => toggleSubMenu('appearance')}
                     >
                       🎨 Appearance <span class="sub-menu-indicators" style="color: {activeSubMenu === 'appearance' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'appearance' ? '-' : '+'}</span>
-                    </button>                 
+                    </button>
+                    <button
+                      class="menu-item"
+                      on:click={showCategoryModal}
+                    >
+                      📑 Categories 
+                    </button>                
                     <button
                       class="menu-item"
                       on:click={async () => {
@@ -3232,6 +3220,12 @@ onDestroy(() => {
 
 
 <!-- ============================= PROPS ============================= -->
+
+<CategoryModal
+  showCategoryModal={showCategoryModalOpen}
+  {setMessage}
+  onclose={() => showCategoryModalOpen = false}
+/>
 
 <TimeoutModal
   {showTimeoutModal}
@@ -3855,7 +3849,7 @@ onDestroy(() => {
     border-radius: 6px;
     font-size: 30px;
     text-overflow: ellipsis;
-    white-space: wrap;
+    white-space: nowrap;
     margin: -20px auto 20px;
     padding: 1px 30px;
     height: 45px;
@@ -4808,7 +4802,9 @@ onDestroy(() => {
   }
 
   .error {
+    background: rgba(255, 255, 255, 0.5);
     color: #BA3D3D;
+
   }
 
   .info-panel { /*==============================CodeBlack*/
