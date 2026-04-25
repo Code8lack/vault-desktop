@@ -25,6 +25,8 @@
   import { calculateEntropy, calculateStrengthScore } from '$lib/MetricsEngine.js';
   import { categories } from '$lib/categoryStore.js';
   import CategoryModal from '$lib/CategoryModal.svelte';
+  import { resolveSearchTerm } from '$lib/categoryStore.js';
+
 
   
   export let serviceName: string;
@@ -190,6 +192,8 @@
   let showNewCatForm = false;
   let quickNewEmoji  = '';
   let quickNewLabel  = '';
+  let pendingServiceRename = null;
+
 
 //=============================== REACTIVES =========================================//
 
@@ -255,11 +259,15 @@ $: isPasswordWeak = strengthScore > 0 && strengthScore < 3.0;
 $: headerAdjusted = (authMode === 'authenticated' && selectedService !== null);
 $: headerListAdjusted = (authMode === 'authenticated' && selectedService == null);
 
+/* ======================= SEARCH ============================= */
+
+$: resolvedSearch = resolveSearchTerm(searchTerm.trim());
+
 // Reactive search logic: filter sortedEntries if searchTerm is 2+ chars
 $: searchResults = searchTerm.trim().length >= 1
   ? [
       ...sortedEntries
-        .filter(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
+        .filter(s => s.toLowerCase().includes(resolvedSearch.toLowerCase()))
         .map(s => ({ type: 'service', label: s })),
       ...menuItems
         .filter(m => m.label.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -1044,18 +1052,21 @@ function persistentFocus(node, isBlocked) {
   async function toggleCategory(cat) {
     if (!selectedService) return;
 
+    const oldName  = selectedService;          // ← capture before any await
     const isApplied = getCategoryApplied(cat);
     const newName = isApplied
-      ? selectedService.replace(cat.emoji, '').replace(/\s{2,}/g, ' ').trim()
-      : (selectedService.trimEnd() + ' ' + cat.emoji);
+      ? oldName.replace(cat.emoji, '').replace(/\s{2,}/g, ' ').trim()
+      : (oldName.trimEnd() + ' ' + cat.emoji);
 
-    const command = `edit_entry:${selectedService}|${newName}|${selectedUsername ?? ''}|${selectedSecretRaw ?? ''}|${selectedWebsite ?? ''}|${selectedNote ?? ''}|`;
+    const safeNote = (selectedNote ?? '').replace(/\n/g, '\\n');
+    const command = `edit_entry:${oldName}|${newName}|${selectedUsername ?? ''}|${selectedSecretRaw ?? ''}|${selectedWebsite ?? ''}|${safeNote}|`;
 
     try {
+      pendingServiceRename = newName; 
       await sendToBackend(command);
-      selectedService = newName;   // update local display immediately
       setMessage(`${isApplied ? '🏷 Category removed.' : '🏷 Category applied.'}`, false, false);
     } catch (err) {
+      pendingServiceRename = null;
       setMessage(`Error: ${err}`, true, false);
     }
   }
@@ -1485,8 +1496,7 @@ function persistentFocus(node, isBlocked) {
       newUsername?.trim() ?? '',
       newPassword ?? '',
       newWebsite?.trim() ?? '',
-      newNote?.trim() ?? '',
-      ''
+      (newNote?.trim() ?? '').replace(/\n/g, '\\n'),      ''
     ];
 
     const command = editMode 
@@ -1948,7 +1958,10 @@ onDestroy(() => {
 
 <div use:setupMainListener={{ 
   clearAuthTimeout, 
-  setMessage, 
+  setMessage,
+  getPendingServiceRename: () => pendingServiceRename,
+  clearPendingServiceRename: () => { pendingServiceRename = null; },
+  setSelectedService: (v) => { selectedService = v; }, 
   toggleForceUI, 
   sendToBackend,
   resetPasswordStates,

@@ -68,11 +68,12 @@ export const categories = createCategoryStore();
 export function resolveSearchTerm(term) {
   const cats = get(categories);
   const t = term.trim();
-  const match = cats.find(
-    c =>
-      c.label.toLowerCase() === t.toLowerCase() ||
-      c.emoji === t
-  );
+const match = cats.find(
+  c =>
+    c.label.toLowerCase().startsWith(t.toLowerCase()) ||  // ← prefix match
+    c.label.toLowerCase() === t.toLowerCase() ||
+    c.emoji === t
+);
   return match ? match.emoji : t;
 }
 
