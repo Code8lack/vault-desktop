@@ -187,7 +187,9 @@
   let selectedEntropy = 0;
   let persistentError = false;
   let showCategoryModalOpen = false;
-
+  let showNewCatForm = false;
+  let quickNewEmoji  = '';
+  let quickNewLabel  = '';
 
 //=============================== REACTIVES =========================================//
 
@@ -332,6 +334,8 @@ $: if (totpStatus === 'setup') {
   // Global focus handler for pre-auth inputs
   const handleGlobalKeyDown = (e) => {
     if (showCategoryModalOpen) return;
+    if (openActionMenu) return;
+    if (showNewCatForm) return;
     const active = document.activeElement;
     const isInput = active.tagName === 'INPUT' || active.tagName === 'TEXTAREA';
     // Ignore if already in an input or if a modifier key (Cmd/Ctrl) is pressed
@@ -386,6 +390,10 @@ $: if (totpStatus === 'setup') {
 
 // ----------------------------- FUNCTIONS ---------------------------------- //
 
+
+function getCategoryApplied(cat) {
+  return (selectedService ?? '').includes(cat.emoji);
+}
 
 function showCategoryModal() {
   showCategoryModalOpen = true;
@@ -1032,6 +1040,35 @@ function persistentFocus(node, isBlocked) {
 
 //---------------------------------------------- ASYNCs ----------------------------------------------
   
+
+  async function toggleCategory(cat) {
+    if (!selectedService) return;
+
+    const isApplied = getCategoryApplied(cat);
+    const newName = isApplied
+      ? selectedService.replace(cat.emoji, '').replace(/\s{2,}/g, ' ').trim()
+      : (selectedService.trimEnd() + ' ' + cat.emoji);
+
+    const command = `edit_entry:${selectedService}|${newName}|${selectedUsername ?? ''}|${selectedSecretRaw ?? ''}|${selectedWebsite ?? ''}|${selectedNote ?? ''}|`;
+
+    try {
+      await sendToBackend(command);
+      selectedService = newName;   // update local display immediately
+      setMessage(`${isApplied ? '🏷 Category removed.' : '🏷 Category applied.'}`, false, false);
+    } catch (err) {
+      setMessage(`Error: ${err}`, true, false);
+    }
+  }
+
+  async function saveQuickCategory() {
+    if (!quickNewEmoji.trim() || !quickNewLabel.trim()) return;
+    categories.add(quickNewEmoji, quickNewLabel);
+    // Immediately apply it to the current service too
+    await toggleCategory({ emoji: quickNewEmoji.trim(), label: quickNewLabel.trim() });
+    quickNewEmoji  = '';
+    quickNewLabel  = '';
+    showNewCatForm = false;
+  }
 
   async function handleExport() {
     try {
@@ -2331,7 +2368,7 @@ onDestroy(() => {
               id="search-vault"
               type="text"
               bind:value={searchTerm}
-              use:persistentFocus={modalOpen || showCategoryModalOpen}
+              use:persistentFocus={modalOpen || showCategoryModalOpen || showNewCatForm}
               on:input={() => { if (searchTerm.trim()) showSearchModal = true; }}
               on:keydown={handleSearchKeydown}
               placeholder="&nbsp;Enter search term"
@@ -2568,7 +2605,7 @@ onDestroy(() => {
           tabindex="0"
           aria-label="Close overlay"
           >
-          <div class="detail-container slide-out-actions" transition:fly={{ x: -280, duration: 150, opacity: 1 }}>        
+          <div class="detail-container slide-out-actions" transition:fly={{ x: -280, duration: 150, opacity: 1 }}   on:keydown|stopPropagation>        
             <div class="action-menu-container">
               <div 
                 class="slide-out-actions" 
@@ -2582,6 +2619,57 @@ onDestroy(() => {
                   <button class="btn btn-icon" on:click={selectLocalIcon}>📁 Browse</button>
                   <button class="btn btn-icon danger" on:click={deleteService}>🗑️ Delete</button>
                   <button class="btn btn-icon" on:click={editService}>✏️ Edit</button>
+                  <div class="cat-chip-section" on:click|stopPropagation on:keydown|stopPropagation>
+                  <div class="cat-chip-label">🏷 Category</div>
+
+                  <div class="cat-chip-row">
+                    {#each $categories as cat (cat.id)}
+                      <button
+                        class="cat-chip"
+                        class:cat-chip-active={getCategoryApplied(cat)}
+                        type="button"
+                        title={cat.label}
+                        on:click|stopPropagation={() => toggleCategory(cat)}
+                      >
+                        {cat.emoji}
+                      </button>
+                    {/each}
+
+                    <!-- + New inline expander -->
+                    <button
+                      class="cat-chip cat-chip-new"
+                      type="button"
+                      title="Add new category"
+                      on:click|stopPropagation={() => { showNewCatForm = !showNewCatForm; }}
+                    >+</button>
+                  </div>
+
+                  {#if showNewCatForm}
+                    <div class="cat-quick-form" on:click|stopPropagation on:keydown|stopPropagation>
+                      <input
+                        class="cat-quick-input emoji-q"
+                        type="text"
+                        maxlength="4"
+                        placeholder="🏷"
+                        bind:value={quickNewEmoji}
+                        on:keydown|stopPropagation={(e) => e.key === 'Enter' && saveQuickCategory()}
+                      />
+                      <input
+                        class="cat-quick-input label-q"
+                        type="text"
+                        placeholder="Name"
+                        bind:value={quickNewLabel}
+                        on:keydown|stopPropagation={(e) => e.key === 'Enter' && saveQuickCategory()}
+                      />
+                      <button
+                        class="cat-chip cat-chip-active"
+                        type="button"
+                        on:click|stopPropagation={saveQuickCategory}
+                      >✅</button>
+                    </div>
+                  {/if}
+                </div>
+
                 </div>
               </div>
             </div><!--action-menu-container-->
@@ -4123,9 +4211,9 @@ onDestroy(() => {
 
   .service-buttons-parent{
     background: rgba(40, 40, 40, 0.95);
-    border: 1px solid #333;
-    margin: 60px -45px -50px;
-    width:160px;
+    border: 1px solid #777;
+    margin: 0 -45px -50px;
+    width:200px;
     height: auto;
     padding: 35px 20px 20px 10px;
     border-radius: 8px;
@@ -4194,6 +4282,85 @@ onDestroy(() => {
     pointer-events: auto;
   }
  
+
+  /* ================================ CATEGORY CHIPS ============================= */
+
+
+  .cat-chip-section {
+    width: 100%;
+    padding: 10px 12px 6px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    margin-top: 4px;
+  }
+
+  .cat-chip-label {
+    font-size: 0.72em;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  .cat-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .cat-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.45);
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms, transform 80ms;
+  }
+
+  .cat-chip:hover {
+    background: var(--bg-secondary, rgba(0,0,0,0.08));
+    transform: scale(1.08);
+  }
+
+  /* Applied state — subtle filled background */
+  .cat-chip-active {
+    background: rgba(0, 0, 0, 0.13);
+    border-color: rgba(0, 0, 0, 0.30);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .cat-chip-new {
+    font-size: 1em;
+    color: #666;
+    font-weight: 500;
+  }
+
+  /* Inline quick-add form */
+  .cat-quick-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .cat-quick-input {
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: rgba(39, 180, 245, 0.18);
+    color: white;
+    padding: 4px 6px;
+    font-size: 0.82em;
+    margin: 50px 0 -50px;
+  }
+
+  .cat-quick-input::placeholder { color: #777; }
+  .cat-quick-input:focus        { outline: none; }
+
+  .emoji-q { width: 36px; text-align: center; flex-shrink: 0; }
+  .label-q  { flex: 1; min-width: 0; }
 
 
   /*==================================== DELETE =====================================*/
