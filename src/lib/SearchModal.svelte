@@ -128,20 +128,20 @@
     align-items: center;
     border: none;
     height: auto;
-    width: 50%;
+    width: 75%;
     min-width: 40%;
     z-index: 250;
     padding: 0;
   }
 
   .search-panel-inner {
-    border-radius: 6px;
+    border-radius: 8px;
     background: rgba(200, 200, 200, 0.8);
     animation: slideIn 1400ms ease;
     padding: 25px;
     font-size: 1.4em;
     font-weight: 350;
-    width: 300px;
+    width: 425px;
   }
 
   .search-bar-mirror {
@@ -156,19 +156,18 @@
     color: darkslategray;
   }
 
-  /* ── Result row ── */
   .result-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     padding: 8px 5px;
     width: 100%;
     font-size: 0.65em;
     overflow: hidden;
     text-align: left;
+    margin-bottom: 3px;
   }
 
   .result-item:last-child {
@@ -196,6 +195,10 @@
     white-space: nowrap;
   }
 
+  .result-item:hover .category-pill {
+    color: floralwhite;
+  }
+
   /* Category pill — only appears on tagged entries */
   .category-pill {
     flex-shrink: 0;
@@ -206,8 +209,7 @@
     border-radius: 999px;
     font-size: 0.85em;
     font-weight: 500;
-    background: rgba(0, 0, 0, 0.10);
-    color: darkslategray;
+    background: rgba(150, 0, 0, 0.10);
     white-space: nowrap;
     letter-spacing: 0.01em;
   }
