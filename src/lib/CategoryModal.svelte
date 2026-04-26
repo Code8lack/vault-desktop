@@ -48,7 +48,7 @@
   }
 
   function addCategory() {
-    if (!newEmoji.trim()) { formError = '⚠️ Please enter an emoji.';  return; }
+    //if (!newEmoji.trim()) { formError = '⚠️ Please enter an emoji.';  return; }
     if (!newLabel.trim()) { formError = '⚠️ Please enter a label.';   return; }
     categories.add(newEmoji, newLabel);
     setMessage(`✅ Category "${newLabel}" added.`, false, false);
@@ -93,6 +93,7 @@
     <div
       class="display-panel category-panel"
       role="dialog"
+      tabindex="0"
       aria-modal="true"
       aria-label="Category Manager"
       transition:fly={{ y: 20, duration: 300 }}
@@ -226,10 +227,9 @@
     font-size: 22px;
     font-weight: 300;
     text-align: center;
-    margin: 18px auto 14px;
+    margin: 0 auto 14px;
   }
 
-  /* ── Close button — matches TotpModal / TimeoutModal ── */
   .panel-close {
     position: relative;
     float: right;
@@ -248,6 +248,7 @@
   /* ── Categories list ── */
   .cat-list-wrap {
     background: rgba(100, 100, 100, 0.2);
+    border: 1px solid #666;
     border-radius: 8px;
     margin: 0 auto 10px;
     width: 85%;
@@ -347,14 +348,14 @@
   .form-error {
     font-size: 0.78em;
     color: #e74c3c;
-    margin-top: 5px;
+    margin-top: 25px;
   }
 
   /* ── Bottom buttons — mirrors TimeoutModal .timeout-main-buttons ── */
   .cat-main-buttons {
     border-top: 1px solid rgba(128, 128, 128, 0.4);
-    padding-top: 20px;
-    margin: 10px auto 0;
+    padding: 20px 0;
+    margin: -5px auto 0;
     width: 100%;
     display: flex;
     justify-content: center;

@@ -116,7 +116,7 @@
   let hasPendingFailureCheck = false;
   let rawPayload = '"login_attempt_detected:Unknown|Local|CLI/GUI|HyGuard Client"';
   let favorites = new Set<string>();
-  let sortByFavorites = true; // Toggle for favorites-first sorting
+  let sortByFavorites = true;
   let passwordFeedback = "";
   let strengthScore = 0;
   let validationError = "";
@@ -1051,8 +1051,7 @@ function persistentFocus(node, isBlocked) {
 
   async function toggleCategory(cat) {
     if (!selectedService) return;
-
-    const oldName  = selectedService;          // ← capture before any await
+    const oldName = selectedService;
     const isApplied = getCategoryApplied(cat);
     const newName = isApplied
       ? oldName.replace(cat.emoji, '').replace(/\s{2,}/g, ' ').trim()
@@ -1062,8 +1061,17 @@ function persistentFocus(node, isBlocked) {
     const command = `edit_entry:${oldName}|${newName}|${selectedUsername ?? ''}|${selectedSecretRaw ?? ''}|${selectedWebsite ?? ''}|${safeNote}|`;
 
     try {
-      pendingServiceRename = newName; 
+      pendingServiceRename = newName;
       await sendToBackend(command);
+
+      // If favorited, remap favorite from old name to new name
+      if (isCurrentServiceFavorited) {
+        console.log('[DEBUG] isFavorited:', isCurrentServiceFavorited, 'oldName:', oldName);
+        await new Promise(resolve => setTimeout(resolve, 300));
+        await sendToBackend(`toggle_favorite:${oldName}`);  // remove old
+        await sendToBackend(`toggle_favorite:${newName}`);  // add new
+      }
+
       setMessage(`${isApplied ? '🏷 Category removed.' : '🏷 Category applied.'}`, false, false);
     } catch (err) {
       pendingServiceRename = null;
@@ -1752,6 +1760,8 @@ function persistentFocus(node, isBlocked) {
     }
   }
 
+  //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––//
+
   export async function triggerLock(): Promise<void> {
     try {
       const btn = document.querySelector<HTMLElement>('[data-lock-button]');
@@ -1961,7 +1971,19 @@ onDestroy(() => {
   setMessage,
   getPendingServiceRename: () => pendingServiceRename,
   clearPendingServiceRename: () => { pendingServiceRename = null; },
-  setSelectedService: (v) => { selectedService = v; }, 
+  setSelectedService: (v) => { selectedService = v; },
+  setFavorites: (name, isFavorited) => {
+  if (isFavorited) {
+    favorites.add(name);
+  } else {
+    favorites.delete(name);
+  }
+  favorites = favorites;  // trigger Svelte reactivity in page scope
+}, 
+setFavoritesAll: (newSet) => {
+  favorites = newSet; 
+},
+  triggerFavoritesUpdate: () => { favorites = favorites; },
   toggleForceUI, 
   sendToBackend,
   resetPasswordStates,
@@ -4371,6 +4393,9 @@ onDestroy(() => {
 
   .cat-quick-input::placeholder { color: #777; }
   .cat-quick-input:focus        { outline: none; }
+  .cat-quick-input:focus::placeholder {
+    color: transparent;
+  }
 
   .emoji-q { width: 36px; text-align: center; flex-shrink: 0; }
   .label-q  { flex: 1; min-width: 0; }
