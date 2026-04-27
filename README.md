@@ -27,12 +27,13 @@
 ![Event & Message Flow](docs/event-flow.png)
 
 ---
+## Recently Completed
+- **Category assignment** — organisational grouping of vault entries
+- **Theme search** — themes surfaced in app-wide search with full keyboard navigation
 
 ## In Development
-
-- **Category assignment** — organisational grouping of vault entries
 - **Nerd Stats carousel** — expanding the current password strength stat into a rotating panel of vault analytics
-
+- **Image addition** — attaching images to vault entries
 ---
 
 ## Testing & Development Status
