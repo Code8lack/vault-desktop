@@ -272,6 +272,9 @@ $: searchResults = searchTerm.trim().length >= 1
       ...menuItems
         .filter(m => m.label.toLowerCase().includes(searchTerm.toLowerCase()))
         .map(m => ({ type: 'menu', label: m.label, action: m.action })),
+      ...themes
+        .filter(t => t.label.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map(t => ({ type: 'theme', label: t.label, _themeId: t.id, _isTheme: true, _category: { emoji: '🎨', label: 'Theme' } })),
     ]
   : [];
 
@@ -452,9 +455,15 @@ function handleSearchKeydown(e) {
     highlightedIndex = (highlightedIndex - 1 + searchResults.length) % searchResults.length;
   } else if (e.key === 'Enter') {
     e.preventDefault();
-    // Use the highlighted item, or default to the first result if index is -1
     const targetIndex = highlightedIndex === -1 ? 0 : highlightedIndex;
-    processSelection(searchResults[targetIndex]);
+    const result = searchResults[targetIndex];
+    if (result._isTheme) {
+      applyTheme(result._themeId);
+      activeThemeId = result._themeId;
+      showSearchModal = false;
+    } else {
+      processSelection(result);
+    }
   }
 }
 
@@ -3416,6 +3425,7 @@ setFavoritesAll: (newSet) => {
 <SearchModal
   bind:showSearchModal
   bind:highlightedIndex
+  on:change={(e) => activeThemeId = e.detail}
   {searchTerm}
   {searchResults}
   on:refocus={() => document.getElementById('search-vault').focus()}
