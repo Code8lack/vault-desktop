@@ -2,6 +2,7 @@
   import { fly } from 'svelte/transition';
   import { createEventDispatcher, onDestroy, tick } from 'svelte';
   import { categories, detectCategory } from './categoryStore.js';
+  import { themes, applyTheme } from '../lib/themes.js';
 
   const dispatch = createEventDispatcher();
 
@@ -18,10 +19,24 @@
 
   // For each result, pre-compute its category (null if untagged).
   // Recomputes whenever results or the category store changes.
-  $: taggedResults = searchResults.map(result => ({
-    ...result,
-    _category: detectCategory(result.label ?? '')
+
+
+  $: themeResults = themes
+  .filter(t => t.label.toLowerCase().includes(searchTerm.toLowerCase()))
+  .map(t => ({
+    label: t.label,
+    _category: { emoji: '🎨', label: 'Theme' },
+    _themeId: t.id,
+    _isTheme: true
   }));
+
+  $: taggedResults = [
+    ...searchResults.map(result => ({
+      ...result,
+      _category: detectCategory(result.label ?? '')
+    })),
+    ...themeResults
+  ];
 
   export function handleKeyDown(e) {
     if (!searchResults.length) return;
@@ -35,9 +50,16 @@
       highlightedIndex = (highlightedIndex - 1 + searchResults.length) % searchResults.length;
     } else if (e.key === 'Enter' && highlightedIndex !== -1) {
       e.preventDefault();
-      dispatch('select', searchResults[highlightedIndex]);
+      const result = taggedResults[highlightedIndex]; // ← was searchResults[highlightedIndex]
+      if (result._isTheme) {
+        applyTheme(result._themeId);
+        showSearchModal = false;
+      } else {
+        dispatch('select', result);
+      }
     }
   }
+
 </script>
 
 {#if showSearchModal}
@@ -71,8 +93,14 @@
                 type="button"
                 on:mouseenter={() => { highlightedIndex = -1; hoveredIndex = i; }}
                 on:mouseleave={() => { hoveredIndex = -1; }}
-                on:mousedown|preventDefault={() => dispatch('select', result)}
-              >
+                on:mousedown|preventDefault={() => {
+                  if (result._isTheme) {
+                    applyTheme(result._themeId);
+                    showSearchModal = false;
+                  } else {
+                    dispatch('select', result);
+                  }
+                }}              >
                 <span class="result-label">{result.label}</span>
 
                 {#if result._category}
@@ -195,7 +223,8 @@
     white-space: nowrap;
   }
 
-  .result-item:hover .category-pill {
+  .result-item:hover .category-pill,
+  .result-item.highlighted .category-pill {
     color: floralwhite;
   }
 
