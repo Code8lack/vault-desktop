@@ -23,6 +23,7 @@
   function closePanel() {
     timeoutError = '';
     timeoutMinutes = Math.floor(currentTimeout / 60000);
+    document.getElementById('search-vault')?.focus();
     onclose();
   }
 
@@ -37,6 +38,7 @@
     timeoutError = '';
     setMessage(`🕟 Timeout set for ${minutes} minutes.`, false, false);
     onclose();
+    document.getElementById('search-vault')?.focus();
   }
 </script>
 
