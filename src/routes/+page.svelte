@@ -3346,6 +3346,7 @@ setFavoritesAll: (newSet) => {
     {setMessage}
     on:change={(e) => { applyLockBg(e.detail); showLockBgPicker = false; }}
     on:close={() => showLockBgPicker = false}
+    on:refocus={() => document.getElementById('search-vault').focus()}
   />
 {/if}
 <LockScreenContrastToggle {lockBg} {authMode} on:change={e => lockContrastMode = e.detail} />

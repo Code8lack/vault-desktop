@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { invoke } from '@tauri-apps/api/core';
+  import { tick } from 'svelte';
 
   const dispatch = createEventDispatcher();
   const STORAGE_KEY = 'vltmt-lock-bg';
@@ -26,6 +27,10 @@
     } catch (e) {
       setMessage('❌ Failed to load image.', false, true);
     }
+
+    window.focus();
+    await tick();
+    dispatch('refocus');
   }
 
   function clearBg() {
@@ -36,6 +41,7 @@
 
   function close() {
     dispatch('close');
+    dispatch('refocus');
   }
 </script>
 
