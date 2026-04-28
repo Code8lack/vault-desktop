@@ -13,6 +13,7 @@
 
   function close() {
     dispatch('close');
+    dispatch('refocus');
   }
 
 </script>

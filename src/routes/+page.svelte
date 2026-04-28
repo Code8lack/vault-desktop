@@ -3336,6 +3336,7 @@ setFavoritesAll: (newSet) => {
     {activeThemeId}
     on:change={(e) => activeThemeId = e.detail}
     on:close={() => showThemePicker = false}
+    on:refocus={() => document.getElementById('search-vault').focus()}  
   />
 {/if}
 
