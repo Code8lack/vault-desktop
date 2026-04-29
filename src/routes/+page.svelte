@@ -876,6 +876,11 @@ function persistentFocus(node, isBlocked) {
     activeSubMenu = '';
   }
 
+  function close() {
+    dispatch('close');
+  }
+
+
 //----------------------BASIC FUNCTIONS---------------------------
 
 
@@ -2603,7 +2608,13 @@ setFavoritesAll: (newSet) => {
               <div class="nerd-stats">
                 <div class="stats-banner">
                   <div class="label">Nerd Stats</div>
-                  <button class="menu-close" on:click={() => {/*...existing logic...*/}}>✕</button>
+                  <button class="menu-close"
+                  on:click={() => {
+                  showNerdPanel = false;
+                  localStorage.setItem('nerdPanelActive', 'false'); 
+                  setMessage("🧠 Nerd Stats Inactive.", false, false)
+                  }}
+                  >✕</button>
                 </div>
 
                 <div class="nerd-data-row" style="--t-count: 4; --t-height: 25px; --t-speed: 10s;">
