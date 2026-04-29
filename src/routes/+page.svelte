@@ -2617,15 +2617,12 @@ setFavoritesAll: (newSet) => {
                   >✕</button>
                 </div>
 
-                <div class="nerd-data-row" style="--t-count: 4; --t-height: 25px; --t-speed: 10s;">
-                  
+                <div class="nerd-data-row" style="--t-count: 2; --t-height: 30px; --t-speed: 10s;">
                   <div class="v-ticker label">
                     <div class="v-ticker-wrapper">
-                      <span>Rating</span>
-                      <span></span>
-                      <span>Entropy</span>
-                      <span></span>
-                      <span>Rating</span>
+                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)} / 5</span>
+                      <span>Entropy:{selectedEntropy || 0} Bits</span>
+                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)} / 5</span>
                     </div>
                   </div>
 
@@ -2633,16 +2630,6 @@ setFavoritesAll: (newSet) => {
                     {#each heatStack as color}
                       <div class="bar" style="background-color: {color};"></div>
                     {/each}
-                  </div>
-
-                  <div class="v-ticker heat-label">
-                    <div class="v-ticker-wrapper">
-                      <span>{(selectedStrengthScore / 2).toFixed(1)} / 5</span>
-                      <span></span>
-                      <span>{selectedEntropy || 0} Bits</span>
-                      <span></span>
-                      <span>{(selectedStrengthScore / 2).toFixed(1)} / 5</span>
-                    </div>
                   </div>
                   
                 </div>
@@ -4500,9 +4487,6 @@ setFavoritesAll: (newSet) => {
     gap: 2px;
   }
 
-  nerd-data-row.label {
-  }
-
   .bar {
     width: 100%;
     border-radius: 1px;
@@ -4514,7 +4498,8 @@ setFavoritesAll: (newSet) => {
   /* ================== Generalized vertical slider for DRY reuse ================ */
 
   .nerd-data-row {
-    margin: 10px 0 0 15px;
+    margin: 10px 0 0 7px;
+    width: 80%;
   }
 
   .heat-label {
@@ -4530,12 +4515,12 @@ setFavoritesAll: (newSet) => {
     border-radius: 4px;
     align-items: center;
     justify-content: center;
-    font-size: 0.85em;
+    font-size: 0.6em;
     font-weight: 500;
     font-family: monaco, monospace;
     letter-spacing: -0.9px;
-    width: 50%;
-    height: 25px; /* Match --t-height */
+    width: 57%;
+    height: 30px; /* Match --t-height */
     overflow: hidden;
   }
 
