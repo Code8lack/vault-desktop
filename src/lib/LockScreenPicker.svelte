@@ -57,7 +57,7 @@
 
     <button class="btn menu-item" on:click={pickFile}>Choose New Image</button>
     {#if currentBg}
-      <button class="btn menu-item" on:click={clearBg}>Clear Image</button>
+      <button class="btn menu-item" on:click={clearBg, close}>Clear Image</button>
     {/if}
   </div>
 </div>
@@ -66,7 +66,7 @@
   class="overlay"
   role="button"
   tabindex="0"
-  on:click={close()}
+  on:click={close}
   on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); close(); } }}
   aria-label="Close lock background panel"
 ></div>
