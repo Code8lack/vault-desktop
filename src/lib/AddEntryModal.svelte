@@ -164,7 +164,7 @@
     position: relative;
     font-size: 25px;
     margin: 20px auto 30px;
-    top: 50px;
+    top: 80px;
   }
 
   .panel-close{
@@ -233,7 +233,6 @@
   .form-field input::placeholder, .add-note textarea::placeholder {
     font-size: 13px;
     font-weight: 300;
-    color: #777;
   }
 
   .form-field textarea {
