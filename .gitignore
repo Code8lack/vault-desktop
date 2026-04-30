@@ -47,7 +47,7 @@ rebar.lock
 src/lib/main-listener.js
 
 # Personal/live vault icons — keep only the default placeholder
-static/icons/*
+static/*
 !static/icons/default.png
 
 # Core launch architecture
