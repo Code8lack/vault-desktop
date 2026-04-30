@@ -3348,7 +3348,7 @@ setFavoritesAll: (newSet) => {
   />
 {/if}
 <LockScreenContrastToggle {lockBg} {authMode} on:change={e => lockContrastMode = e.detail} />
-<div class="info-panel"> protection by CodeBlack 🔵</div>
+<div class="info-panel"> Protection by CodeBlack 🔵</div>
 
 
 <!-- ============================= PROPS ============================= -->
@@ -5025,7 +5025,7 @@ setFavoritesAll: (newSet) => {
     bottom: 25px;
     right: 20px;
     padding: 5px 8px;
-    background: rgba(250, 250, 250, 0.55);
+    background: rgba(250, 250, 250, 0.15);
     border-radius: 8px;
     font-size: 0.6rem;
     max-width: 260px;
