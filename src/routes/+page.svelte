@@ -2066,7 +2066,7 @@ setFavoritesAll: (newSet) => {
   <div class="header-wrapper-parent" class:changeNew={changingNew} class:changeVerify={changingVerify}>
     <div class="header-wrapper" class:minimized={headerMinimized} class:adjusted={headerAdjusted} class:list-adjusted={headerListAdjusted} class:locked-screen={authMode === 'locked' || authMode === 'password' || authMode === 'recovery'}  class:totp-challenge={authMode === 'totp_challenge'}>
       {#if authMode === 'locked' || selectedService !== null || selectedService == null}
-        <h1 class="main-header">Vaultimate<span></span></h1>
+        <h1 class="main-header">LockStep<span></span></h1>
         <h3>{selectedService === null && authMode === 'authenticated' ? 'Industrial-Grade Security' : 'Hyper-Robust Industrial-Grade Security'}</h3>
       {/if}
     </div>
