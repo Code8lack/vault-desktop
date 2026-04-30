@@ -347,9 +347,14 @@ input:focus {
   background: indianred;
 }
 
-
-
 [data-theme="brutalist"] .result-item:hover,
 [data-theme="brutalist"] .result-item.highlighted { /* Added theme scope here */
   background-color: lightblue;
 }
+
+[data-theme="gold"] .cat-picker-title,
+                      .cat-picker-row {
+  color: var(--text-secondary);
+}
+
+
