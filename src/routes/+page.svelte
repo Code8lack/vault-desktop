@@ -3895,7 +3895,7 @@ setFavoritesAll: (newSet) => {
 
   .button-wrapper.minimized { /* selectedService */
     position: relative;
-    top: -60px;
+    top: -45px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -3985,7 +3985,7 @@ setFavoritesAll: (newSet) => {
     font-size: 30px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: -20px auto 20px;
+    margin: -20px auto 22px;
     padding: 1px 30px;
     height: 45px;
     min-width: 350px;
@@ -4019,12 +4019,11 @@ setFavoritesAll: (newSet) => {
     position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 15px;
     align-items: center;
     width: 45px;
     height: 115px;
     bottom: 0;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
   }
 
   .cog-icon {
@@ -4070,6 +4069,10 @@ setFavoritesAll: (newSet) => {
     padding: 5px;
   }
 
+  .login {
+    margin-top: 10px;
+  }
+
   .login label {
     left:0;
   }
@@ -4090,15 +4093,20 @@ setFavoritesAll: (newSet) => {
     font-weight: 400;
   }
 
+  .note {
+    margin-top: 5px;
+  }
+
   .fields-container {/*=============== VIEWPORT ==================*/
     border:1px solid rgba(75, 75, 75, 0.8);
     border-radius: 4px;
     background: rgba(10, 30, 30, 0.2);
     position: relative;
-    height: 195px;
+    height: 220px;
     display: flex;
     flex-direction: column; 
     padding: 10px;
+    margin-top: -10px;
     overflow-y: auto; 
     flex-grow: 1;
   }
@@ -4446,7 +4454,7 @@ setFavoritesAll: (newSet) => {
   .nerd-stats{
     border-radius: 8px; 
     background: rgba(100, 100, 100, 0.2);
-    margin-top: 5px;
+    margin-top: 15px;
     width: 150px;
     height: 125px;
     position:absolute;
