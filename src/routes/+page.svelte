@@ -1147,7 +1147,7 @@ function persistentFocus(node, isBlocked) {
   }
 
   async function handleCopy(text) { 
-    const success = await copyToClipboard(text);
+  const success = await copyToClipboard(text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]+\s*$/u, '').trimEnd());
     if (success) {
         setMessage('✅ Copied', false, false);
         errorMessage = '';
