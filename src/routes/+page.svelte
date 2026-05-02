@@ -28,7 +28,7 @@
   import { resolveSearchTerm } from '$lib/categoryStore.js';
 
 
-  
+  export let hotZoneColour = null;
   export let serviceName: string;
 
   type AuthMode = 'locked' | 'authenticating' | 'authenticated' | 'changing_verify' | 'changing_new' | 'recovery' | 'error';
@@ -45,7 +45,7 @@
   let infoMessage = '';
   let errorMessage = '';
   let keepAliveThrottle: any = undefined;
-  let hotZone = false;
+  let hotZone = null;
   let unlistenResponse: () => void;
   let unlistenReset: UnlistenFn | null = null;
   let unlistenError: () => void;
@@ -193,6 +193,7 @@
   let quickNewEmoji  = '';
   let quickNewLabel  = '';
   let pendingServiceRename = null;
+
 
 
 //=============================== REACTIVES =========================================//
@@ -499,6 +500,7 @@ function persistentFocus(node, isBlocked) {
 
 
   function syncState(updatedOptions) {
+    console.log("[SYNC] hotZone value:", updatedOptions.hotZone);
     authMode = updatedOptions.authMode;
     authStep = updatedOptions.authStep;
     entries = updatedOptions.entries;
@@ -827,7 +829,6 @@ function persistentFocus(node, isBlocked) {
   onDestroy(() => {
     if (unlistenResponse) unlistenResponse();
     if (unlistenError) unlistenError();
-    if (unlistenHotZone) unlistenHotZone();
     if (authTimeoutId) clearTimeout(authTimeoutId);
     if (infoTimeoutId) clearTimeout(infoTimeoutId);
     if (maskInterval) clearTimeout(maskInterval);
@@ -999,7 +1000,7 @@ function persistentFocus(node, isBlocked) {
       password = '';
       newPassword = '';
       confirmPassword = '';
-      hotZone = false;
+      hotZone = null;
       authTimeoutId = undefined;
     }, AUTH_TIMEOUT_MS);
   }
@@ -1254,7 +1255,7 @@ function persistentFocus(node, isBlocked) {
       await sendToBackend("acknowledge-login-attempt");
       
       showLoginAttemptPanel = false;
-      hotZone = false;  // ⚠️ Release the lock
+      hotZone = null;  // ⚠️ Release the lock
       infoMessage = '';
       persistentInfo = false;
       
@@ -1834,7 +1835,7 @@ function persistentFocus(node, isBlocked) {
       password = '';
       newPassword = '';
       confirmPassword = '';
-      hotZone = false;
+      hotZone = null;
       infoMessage = 'Locked.';
     }
   }
@@ -1940,10 +1941,6 @@ unlistenError = await listen('gui_error', (event) => {
 
   setMessage(finalMsg, false, true); 
 });
-
-  unlistenHotZone = await listen('hot-zone', (event: any) => {
-      hotZone = event.payload.inside;
-  });
 
   try {
     await invoke('run_erlang_setup');
@@ -2425,7 +2422,7 @@ setFavoritesAll: (newSet) => {
             />
           </div>
         </div><!--add-nav-parent-->
-      {/if}
+      {/if}<!--navVisible-->
 
 
   <!-- ========================== SERVICE LIST ================================ -->
@@ -3347,8 +3344,14 @@ setFavoritesAll: (newSet) => {
     on:refocus={() => document.getElementById('search-vault').focus()}
   />
 {/if}
+
+
+{#if hotZone}
+  <div class="timeout-indicator" style="color: {hotZone}">⬤</div>
+{/if}
 <LockScreenContrastToggle {lockBg} {authMode} on:change={e => lockContrastMode = e.detail} />
 <div class="info-panel"> Protection by CodeBlack 🔵</div>
+
 
 
 <!-- ============================= PROPS ============================= -->
@@ -5061,7 +5064,7 @@ setFavoritesAll: (newSet) => {
     display: flex;       
     flex-direction: row;   
     flex-wrap: nowrap;
-    gap: 2px;  
+    gap: 5px;  
     overflow: hidden;
   }
 
@@ -5094,6 +5097,15 @@ setFavoritesAll: (newSet) => {
     height: 25px;
     font-size: 0.75em;
     font-weight: 300;
+  }
+
+  .timeout-indicator {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 60%;
   }
 
 /* ======================================= LIST ITEM FLASH ================================================ */
