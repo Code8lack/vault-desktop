@@ -325,7 +325,7 @@
 
   .strength-bar-wrap {
     height: 4px;
-    width: 97%;
+    width: 90%;
     background: rgba(255,255,255,0.5);
     border-radius: 2px;
     margin-top: -40px;
