@@ -1,3 +1,5 @@
+
+
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { invoke } from '@tauri-apps/api/core';
@@ -25,7 +27,7 @@
   import { calculateEntropy, calculateStrengthScore } from '$lib/MetricsEngine.js';
   import { categories } from '$lib/categoryStore.js';
   import CategoryModal from '$lib/CategoryModal.svelte';
-  import { resolveSearchTerm } from '$lib/categoryStore.js';
+  import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
 
 
   export let hotZoneColour = null;
@@ -529,6 +531,7 @@ function persistentFocus(node, isBlocked) {
     selectedSecretRaw = updatedOptions.selectedSecretRaw;
     selectedSecretDisplay = updatedOptions.selectedSecretDisplay;
     selectedService = updatedOptions.selectedService;
+     
     selectedSecret = updatedOptions.selectedSecret;
     latestIconPath = updatedOptions.latestIconPath ?? latestIconPath;
     searchTerm = updatedOptions.searchTerm;
@@ -734,28 +737,36 @@ function persistentFocus(node, isBlocked) {
 
   function navigateService(direction: 'prev' | 'next') {
     if (!entries.length) return;
-
-    //traverse a case-insensitive sorted copy so e.g. eBay slots correctly between Dropbox and Edmond de Rothschild
-
     const sorted = [...entries].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
 
     if (selectedService === null) {
-      selectedService = direction === 'next' ? sorted[0] : sorted[sorted.length - 1];
-      sendToBackend(`get_secret:${selectedService}`);
+      const name = direction === 'next' ? sorted[0] : sorted[sorted.length - 1];
+      selectedService = name;
+      sendToBackend(`get_secret:${name}:1`);
       return;
     }
 
-    const index = sorted.indexOf(selectedService);
-    if (index === -1) return;
+    if (nav.index === null) {
+      nav.index = sorted.findIndex(e => e === selectedService);
+    }
+    if (nav.index === -1) return;
 
-    const nextIndex =
+    nav.index =
       direction === 'next'
-        ? (index + 1) % sorted.length
-        : (index - 1 + sorted.length) % sorted.length;
+        ? (nav.index + 1) % sorted.length
+        : (nav.index - 1 + sorted.length) % sorted.length;
 
-    selectedService = sorted[nextIndex];
+    const targetName = sorted[nav.index];
+
+    // Count which occurrence of targetName this index represents
+    let occurrence = 0;
+    for (let i = 0; i <= nav.index; i++) {
+      if (sorted[i] === targetName) occurrence++;
+    }
+
+    selectedService = targetName;
     selectedSecret = null;
-    sendToBackend(`get_secret:${selectedService}`);
+    sendToBackend(`get_secret:${targetName}:${occurrence}`);
   }
 
   function handleMasterPasswordInput(event: Event) {
@@ -1165,6 +1176,7 @@ function persistentFocus(node, isBlocked) {
     }
     // service selection unchanged ↓
     selectedService = selected.label;
+    
     selectedSecret = null;
     showSearchModal = false;
     searchTerm = '';
@@ -1394,6 +1406,7 @@ function persistentFocus(node, isBlocked) {
 
   async function selectService(service: string) {
     selectedService = service;
+    
     selectedUsername = '';
     selectedWebsite = '';
     selectedNote = '';
@@ -1759,7 +1772,6 @@ function persistentFocus(node, isBlocked) {
     if (!selectedService) return;
 
     const serviceToDelete = selectedService;
-    // Show feedback immediately (before network roundtrip)
     infoMessage = `❌ Deleting ${serviceToDelete}...`;
     errorMessage = '';
 
@@ -1982,14 +1994,19 @@ onDestroy(() => {
   setMessage,
   getPendingServiceRename: () => pendingServiceRename,
   clearPendingServiceRename: () => { pendingServiceRename = null; },
-  setSelectedService: (v) => { selectedService = v; },
+  //setSelectedService: (v) => { selectedService = v; },
+  setSelectedService: (v) => { 
+    console.log('[SET SELECTED SERVICE]', v);
+    nav.index = null; 
+    selectedService = v; 
+  },
   setFavorites: (name, isFavorited) => {
   if (isFavorited) {
     favorites.add(name);
   } else {
     favorites.delete(name);
   }
-  favorites = favorites;  // trigger Svelte reactivity in page scope
+  favorites = favorites; 
 }, 
 setFavoritesAll: (newSet) => {
   favorites = newSet; 
@@ -2344,7 +2361,6 @@ setFavoritesAll: (newSet) => {
                   selectedService = null;
                   selectedSecret = null;
                   await tick();
-
                   const maxWait = 1500;
                   const interval = 50;
                   let elapsed = 0;
@@ -2436,6 +2452,7 @@ setFavoritesAll: (newSet) => {
                   type="button" 
                   on:click={async () => {
                     selectedService = e;
+                    
                     selectedSecret = null;
                     await sendToBackend(`get_secret:${e}`);
                     clearMessages();

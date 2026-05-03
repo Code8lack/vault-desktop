@@ -3,6 +3,8 @@
 // in localStorage so they survive app restarts without any backend changes.
 
 import { writable, derived, get } from 'svelte/store';
+export const nav = { index: null };
+
 
 const STORAGE_KEY = 'lockstep_categories';
 
