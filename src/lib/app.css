@@ -354,7 +354,7 @@ input:focus {
 
 [data-theme="gold"] .cat-picker-title,
                       .cat-picker-row {
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 
