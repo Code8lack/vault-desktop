@@ -195,7 +195,7 @@
   let quickNewEmoji  = '';
   let quickNewLabel  = '';
   let pendingServiceRename = null;
-
+  let showForcePrompt = false;
 
 
 //=============================== REACTIVES =========================================//
@@ -1213,6 +1213,8 @@ function persistentFocus(node, isBlocked) {
   async function handleNormalPasswordSubmit() {
     if (!newPassword) return;
     if (newPassword !== confirmPassword) { errorMessage = 'Passwords do not match'; return; }
+    if (isPasswordWeak) { showForcePrompt = true; return; }
+
     errorMessage = '';
     setMessage('🔒 Updating password...', true, false);    
     const prefix = authMode === 'recovery_password' 
@@ -1443,6 +1445,7 @@ function persistentFocus(node, isBlocked) {
         errorMessage = "Passwords do not match";
         return;
     }
+    if (isPasswordWeak) { showForcePrompt = true; return; }
     if (recoveryInProgress) return;
     recoveryInProgress = true;
     try {
@@ -1707,6 +1710,7 @@ function persistentFocus(node, isBlocked) {
     if (newPassword.length === 0) {
         strengthScore = 0;
         isPasswordWeak = false;
+        showForcePrompt = false;
     } else {
       sendToBackend('validate_password:false|' + newPassword);
     }
@@ -2267,7 +2271,7 @@ setFavoritesAll: (newSet) => {
           id="new-master-password"
           type="text"
           bind:value={newPasswordDisplay}
-          on:input={handleNewPasswordInput}
+          on:input={(e) => { showForcePrompt = false; handleNewPasswordInput(e); }}
           on:focus={() => isFocused = true}
           on:blur={() => { isFocused = false; startMasking(); }}
           on:keydown={onPasswordInput}
@@ -2283,7 +2287,7 @@ setFavoritesAll: (newSet) => {
           id="confirm-master-password"
           type="text"
           bind:value={confirmPasswordDisplay}
-          on:input={handleConfirmPasswordInput}
+          on:input={(e) => { showForcePrompt = false; handleConfirmPasswordInput(e); }}
           on:keydown={onPasswordInput}
           on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('confirm'); handleNormalPasswordSubmit(); feedbackMessage = "";} }}
           placeholder="Confirm New Password"
@@ -2306,17 +2310,17 @@ setFavoritesAll: (newSet) => {
         <div class="changing-new">
           <button
             id={authMode === 'recovery_password' ? 'set-password-btn' : 'change-password-btn'}
-            class={isPasswordWeak ? 'btn force danger' : 'btn'}
+            class={showForcePrompt ? 'btn force danger' : 'btn'}
             class:key-flash={flashingBtn === 'confirm'}
             type="button"
             on:click={() => {
-              if (isPasswordWeak) {
+              if (showForcePrompt) {
                 showForcePassword = true;
               } else {
                 authMode === 'recovery_password' ? applyRecoveryPassword() : handleNormalPasswordSubmit(); feedbackMessage = "";
               }
             }}>
-            {isPasswordWeak ? 'Force Weak Password?' : authMode === 'recovery_password' ? 'Set Password' : 'Confirm'}
+            {showForcePrompt ? 'Force Weak Password?' : authMode === 'recovery_password' ? 'Set Password' : 'Confirm'}
           </button>
           <button
             id={authMode === 'recovery_password' ? 'force-set-password-btn' : 'force-change-password-btn'}
@@ -4185,7 +4189,7 @@ setFavoritesAll: (newSet) => {
   }
 
   .auth-container .form-field input {
-    color: aliceblue;
+    color: #fff;
     font-size: 18px;
   }
 
