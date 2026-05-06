@@ -14,17 +14,24 @@
   export let handleNewPasswordInput: (e: Event) => void;
   export let handlePasswordPaste: (e: ClipboardEvent, type: string) => void;
   export let strengthScore: number = 0;
-  //export let validationError: string = '';
   export let feedbackMessage: string = '';
   export let setMessage: (msg: string, isError?: boolean, isTimeout?: boolean) => void;
 
   import { hidePlaceholder } from './action.js';
   import { categories } from './categoryStore.js';
+  import PasswordGenerator from './PasswordGenerator.svelte';
 
   const dispatch = createEventDispatcher();
 
-  // ── Category picker state ──────────────────────────────────────────────────
+  let showPasswordGenerator = false;
   let showCatPicker = false;
+
+  
+  function onUsePassword(e: CustomEvent<{ password: string }>) {
+    newPasswordDisplay    = e.detail.password;
+    showPasswordGenerator = false;
+    handleNewPasswordInput(new InputEvent('input'));
+  }
 
   function isCatApplied(emoji: string): boolean {
     return newServiceName.includes(emoji);
@@ -182,7 +189,9 @@
           ></textarea>
         </div>
       </div><!--add-entry-form-->
-     <div class="panel-buttons crud">
+      <div class="panel-buttons crud">
+        <!-- ── add the Generate button ── -->
+        <button class="btn" type="button" title="Generate password" on:click={() => showPasswordGenerator = true}>🎲</button>
         <button class="btn" type="button" on:click={submitNewEntry}>✅</button>
         <button class="btn" type="button" on:click={() => { close(); noAdd(); }}>❌</button>
       </div>
@@ -202,6 +211,12 @@
     aria-label="Close add entry overlay (click outside)"
   ></div>
 {/if}
+
+<PasswordGenerator
+  show={showPasswordGenerator}
+  on:usePassword={onUsePassword}
+  on:close={() => showPasswordGenerator = false}
+/>
 
 <style>
 
