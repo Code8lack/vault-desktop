@@ -171,6 +171,7 @@ color: var(--text-secondary);
 
 .btn.danger:hover {
   background: #BA3D3D;
+  color: white;
 }
 .back-button-hidden {
   opacity: 0;
