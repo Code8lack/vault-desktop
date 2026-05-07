@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
+  import { calculateEntropy } from '$lib/EntropyEngine';
 
   export let show: boolean = false;
 
@@ -29,10 +30,10 @@
 
   // ── Password generation ───────────────────────────────────────────────────
   const CHARS = {
-    lower:   'abcdefghijklmnopqrstuvwxyz',
-    upper:   'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    digits:  '0123456789',
-    symbols: '!@#$%^&*()-_=+[]{}|;:,.<>?',
+    lower: 'abcdefghijkmnopqrstuvwxyz', // Removed 'l'
+    upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ', // Removed 'I', 'O'
+    digits: '23456789',               // Removed '0', '1'
+    symbols: '!@#$%^&*-_=+'            // Matches Erlang ?SPECIALS [cite: 2]
   };
 
   function regenerate() {

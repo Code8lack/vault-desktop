@@ -24,7 +24,7 @@
   import LockScreenContrastToggle from '../lib/LockScreenContrastToggle.svelte';
   import { tick } from 'svelte';
   import { createMenuItems } from '$lib/menuItems.js';
-  import { calculateEntropy, calculateStrengthScore } from '$lib/MetricsEngine.js';
+  import { calculateEntropy, calculateStrengthScore } from '$lib/EntropyEngine.js';
   import { categories } from '$lib/categoryStore.js';
   import CategoryModal from '$lib/CategoryModal.svelte';
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
