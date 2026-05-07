@@ -30,7 +30,7 @@
   function onUsePassword(e: CustomEvent<{ password: string }>) {
     newPasswordDisplay    = e.detail.password;
     showPasswordGenerator = false;
-    handleNewPasswordInput(new InputEvent('input'));
+    handleNewPasswordInput({ target: { value: newPasswordDisplay } } as unknown as Event);
   }
 
   function isCatApplied(emoji: string): boolean {
