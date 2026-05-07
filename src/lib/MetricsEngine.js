@@ -1,25 +1,23 @@
-// MetricsEngine.js
 
 /**
  * Calculates Shannon Entropy for a string.
- * Formula: $$E = L \cdot \log_2(R)$$
- * Where L is length and R is the character pool size.
+ * Aligned with vault_password_generator.erl pool definitions.
  */
 export const calculateEntropy = (str) => {
   if (!str) return 0;
+  
   let charsetSize = 0;
   if (/[a-z]/.test(str)) charsetSize += 26;
   if (/[A-Z]/.test(str)) charsetSize += 26;
-  if (/[0-9]/.test(str)) charsetSize += 10;
-  if (/[^a-zA-Z0-9]/.test(str)) charsetSize += 32;
-  return charsetSize === 0 ? 0 : Math.floor(str.length * Math.log2(charsetSize));
+  if (/[0-9]/.test(str)) charsetSize += 8;
+  if (/[!@#$%^&*-_=+]/.test(str)) charsetSize += 12;
+  
+  // Use precision instead of floor to track progress toward 150 bits
+  return charsetSize === 0 ? 0 : parseFloat((str.length * Math.log2(charsetSize)).toFixed(2));
 };
 
 export const calculateStrengthScore = (str) => {
-  if (!str) return 0;
-  const len = str.length;
-  const variety = (/[A-Z]/.test(str) ? 1.5 : 0) + 
-                  (/[0-9]/.test(str) ? 1.5 : 0) + 
-                  (/[^A-Za-z0-9]/.test(str) ? 2 : 0);
-  return Math.min(10, (len * 0.4) + variety);
+  const entropy = calculateEntropy(str);
+  // Map 0-150 bits to a 0-10 score if you still want a legacy "gauge"
+  return Math.min(10, (entropy / 15)); 
 };
