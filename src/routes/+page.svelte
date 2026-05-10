@@ -454,8 +454,8 @@ function handleSearchKeydown(e) {
     e.preventDefault();
     highlightedIndex = (highlightedIndex + 1) % searchResults.length;
   } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    highlightedIndex = (highlightedIndex - 1 + searchResults.length) % searchResults.length;
+      e.preventDefault();
+      highlightedIndex = ((highlightedIndex < 0 ? 0 : highlightedIndex) - 1 + searchResults.length) % searchResults.length;
   } else if (e.key === 'Enter') {
     e.preventDefault();
     const targetIndex = highlightedIndex === -1 ? 0 : highlightedIndex;

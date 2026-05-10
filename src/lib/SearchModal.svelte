@@ -23,21 +23,6 @@
     _category: result._category ?? detectCategory(result.label ?? '')
   }));
 
-  export function handleKeyDown(e) {
-    if (!searchResults.length) return;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      hoveredIndex = -1;
-      highlightedIndex = (highlightedIndex + 1) % searchResults.length;
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      hoveredIndex = -1;
-      highlightedIndex = (highlightedIndex - 1 + searchResults.length) % searchResults.length;
-    } else if (e.key === 'Enter' && highlightedIndex !== -1) {
-      e.preventDefault();
-      dispatch('select', searchResults[highlightedIndex]);
-    }
-  }
 </script>
 
 {#if showSearchModal}
