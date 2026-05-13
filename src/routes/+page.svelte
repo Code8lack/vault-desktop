@@ -2665,7 +2665,7 @@ setFavoritesAll: (newSet) => {
           tabindex="0"
           aria-label="Close overlay"
           >
-          <div class="detail-container slide-out-actions" transition:fly={{ x: -280, duration: 150, opacity: 1 }}   on:keydown|stopPropagation>        
+          <div class="detail-container slide-out-actions" transition:fly={{ x: -280, duration: 150, opacity: 1 }}   on:keydown|stopPropagation role="button" tabindex="0">        
             <div class="action-menu-container">
               <div 
                 class="slide-out-actions" 
@@ -2679,7 +2679,7 @@ setFavoritesAll: (newSet) => {
                   <button class="btn btn-icon" on:click={selectLocalIcon}>📁 Browse</button>
                   <button class="btn btn-icon danger" on:click={deleteService}>🗑️ Delete</button>
                   <button class="btn btn-icon" on:click={editService}>✏️ Edit</button>
-                  <div class="cat-chip-section" on:click|stopPropagation on:keydown|stopPropagation>
+                  <div class="cat-chip-section" on:click|stopPropagation on:keydown|stopPropagation role="button" tabindex="0">
                   <div class="cat-chip-label">🏷 Category</div>
 
                   <div class="cat-chip-row">
@@ -2705,7 +2705,7 @@ setFavoritesAll: (newSet) => {
                   </div>
 
                   {#if showNewCatForm}
-                    <div class="cat-quick-form" on:click|stopPropagation on:keydown|stopPropagation>
+                    <div class="cat-quick-form" on:click|stopPropagation on:keydown|stopPropagation role="button" tabindex="0">
                       <input
                         class="cat-quick-input emoji-q"
                         type="text"
