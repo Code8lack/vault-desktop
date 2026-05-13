@@ -114,8 +114,4 @@
     font-size: 0.9em;
   }
 
-  .theme-tick {
-    margin:0 auto;
-  }
-
 </style>

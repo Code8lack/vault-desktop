@@ -4536,13 +4536,7 @@ setFavoritesAll: (newSet) => {
     width: 80%;
   }
 
-  .heat-label {
-    position: absolute;
-    bottom: 10px;
-    left: 15px;
-  }
-
-  .heat-label, .nerd-data-row {
+  .nerd-data-row {
     background: rgba(255, 255, 255, 0.1);
     display: flex;
     border: 1px solid #555;
@@ -4578,7 +4572,7 @@ setFavoritesAll: (newSet) => {
   }
 
   /* Right-align the values ticker for a cleaner look */
-  .heat-label.v-ticker .v-ticker-wrapper > span {
+  .v-ticker-wrapper > span {
     text-align: right;
     display: block;
   }
