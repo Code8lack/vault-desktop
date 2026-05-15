@@ -33,7 +33,7 @@
     lower: 'abcdefghijkmnopqrstuvwxyz', // Removed 'l'
     upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ', // Removed 'I', 'O'
     digits: '23456789',               // Removed '0', '1'
-    symbols: '!@#$%^&*-_=+'            // Matches Erlang ?SPECIALS [cite: 2]
+    symbols: '!@#$%^&*()-_=+[]{}|;:,.<>?',           // Matches Erlang ?SPECIALS
   };
 
   function regenerate() {

@@ -11,7 +11,7 @@ export const calculateEntropy = (str) => {
   if (/[a-z]/.test(str)) charsetSize += 25; // Excludes 'l'
   if (/[A-Z]/.test(str)) charsetSize += 24; // Excludes 'I', 'O'
   if (/[0-9]/.test(str)) charsetSize += 8;  // Excludes '0', '1'
-  if (/[!@#$%^&*-_=+]/.test(str)) charsetSize += 12; 
+  if (/[!@#$%^&*()\-_=+\[\]{}|;:,.<>?]/.test(str)) charsetSize += 26;  
   
   return charsetSize === 0 ? 0 : parseFloat((str.length * Math.log2(charsetSize)).toFixed(2));
 };
