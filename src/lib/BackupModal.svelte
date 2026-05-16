@@ -3,13 +3,16 @@
 
   let {
     showBackupModal = false,
-    provider = 's3',
+    provider = 'webdav',
     backupEnabled = false,
     backupInterval = 24,
     intervalUnit = 'hours',
     endpoint = '',
     username = '',
     backupPassword = '',
+    accessKey = '',        
+    secretKey = '',        
+    bucket = '',           
     retention = 30,
     encrypt = true,
     sendToBackend = () => {},
@@ -49,6 +52,9 @@
         endpoint,
         username,
         backupPassword,
+        accessKey,     
+        secretKey,     
+        bucket,        
         retention,
         encrypt
       ].join('|');
@@ -83,20 +89,35 @@
         </label>
         <label class="endpoint">
           Endpoint
-          <input type="text" bind:value={endpoint} placeholder="https://s3.example.com" />
+          <input type="text" bind:value={endpoint} placeholder="https://sos-ch-dk-2.exo.io" />
         </label>
 
-        <label>
-          Username
-          <input type="text"
-            bind:value={username}
-            placeholder="Daysmith"
-          />
-        </label>
-        <label>
-          Password
-          <input type="password" bind:value={backupPassword} placeholder="(Password will not be displayed)" />
-        </label>
+        {#if provider === 's3'}
+          <label>
+            Access Key
+            <input type="text" bind:value={accessKey} placeholder="EXO..." />
+          </label>
+          <label>
+            Secret Key
+            <input type="password" bind:value={secretKey} placeholder="(Secret will not be displayed)" />
+          </label>
+          <label>
+            Bucket
+            <input type="text" bind:value={bucket} placeholder="my-vault-bucket" />
+          </label>
+        {:else}
+          <label>
+            Username
+            <input type="text"
+              bind:value={username}
+              placeholder="Daysmith"
+            />
+          </label>
+          <label>
+            Password
+            <input type="password" bind:value={backupPassword} placeholder="(Password will not be displayed)" />
+          </label>
+        {/if}
 
         <label>
           Backup Frequency
