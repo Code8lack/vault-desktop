@@ -2123,8 +2123,7 @@ setFavoritesAll: (newSet) => {
                 bind:this={peekInputEl}
                 bind:value={password}
                 on:input={() => { displayPassword = dot.repeat(password.length); }}
-                on:mouseup={() => { peekPassword = false; startMasking(); maskedInputEl?.focus(); }} 
-                on:mouseleave={() => { peekPassword = false; startMasking(); maskedInputEl?.focus(); }}
+                on:click={() => { peekPassword = false; startMasking(); maskedInputEl?.focus(); }}
                 spellcheck="false"
                 autocomplete="off"
               />
@@ -2136,7 +2135,7 @@ setFavoritesAll: (newSet) => {
                 class="input"
                 bind:this={maskedInputEl}
                 bind:value={displayPassword}
-                on:mousedown={() => { if (displayPassword !== '') peekPassword = true;}}
+                on:click={() => { if (displayPassword !== '') peekPassword = !peekPassword; }}
                 on:input={handleMasterPasswordInput}
                 on:focus={() => isFocused = true}
                 on:blur={() => { isFocused = false; startMasking(); }}
