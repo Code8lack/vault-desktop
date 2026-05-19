@@ -2130,6 +2130,7 @@ setFavoritesAll: (newSet) => {
                 bind:value={password}
                 on:input={() => { displayPassword = dot.repeat(password.length); }}
                 on:click={() => { peekPassword = false; startMasking(); maskedInputEl?.focus(); }}
+                on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('verify'); verifyPassword(); } }}
                 spellcheck="false"
                 autocomplete="off"
               />
