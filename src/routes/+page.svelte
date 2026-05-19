@@ -30,7 +30,6 @@
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
 
 
-  export let hotZoneColour = null;
   export let serviceName: string;
 
   type AuthMode = 'locked' | 'authenticating' | 'authenticated' | 'changing_verify' | 'changing_new' | 'recovery' | 'error';
@@ -1893,12 +1892,19 @@ onMount(async () => {
     // Do NOT set authMode or show password form yet
   });
 
-  const unlisten = await listen('vault_locked', ({ payload }) => {
+const unlisten = await listen('vault_locked', ({ payload }) => {
     closeAllPanelsAndModals();
     clearAuthTimeout();
     authMode = 'locked';
-    // Clearing services here causes a race condition during login/rebuild. 
-    // The UI visibility should be handled by authMode instead.
+    
+    // 1. Force the active element to drop browser focus to stop the carousel trap
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    
+    // 2. Reset your local focus state variable
+    isFocused = false; 
+
     password = '';
     
     let reason = (payload && typeof payload === 'string' && payload.includes(':')) 
