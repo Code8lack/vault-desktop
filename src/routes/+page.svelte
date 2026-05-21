@@ -1900,6 +1900,8 @@ const unlisten = await listen('vault_locked', ({ payload }) => {
     // 1. Force the active element to drop browser focus to stop the carousel trap
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
+      maskedInputEl?.blur();
+      peekInputEl?.blur();
     }
     
     // 2. Reset your local focus state variable
