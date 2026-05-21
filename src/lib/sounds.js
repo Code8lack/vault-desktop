@@ -1,10 +1,17 @@
 export function playUnlockSound({
+  src = null,
   notes = [523.25, 659.25, 783.99],
   spacing = 0.1,
   gain = 0.18,
   decay = 0.35,
   type = 'sine',
 } = {}) {
+  if (src) {
+    const audio = new Audio(src);
+    audio.play().catch(e => console.warn('[Sound] Playback failed:', e));
+    return;
+  }
+
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
 
