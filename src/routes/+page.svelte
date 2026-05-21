@@ -28,6 +28,8 @@
   import { categories } from '$lib/categoryStore.js';
   import CategoryModal from '$lib/CategoryModal.svelte';
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
+  import { playUnlockSound, playLockSound } from '$lib/sounds.js';
+
 
 
   export let serviceName: string;
@@ -1893,6 +1895,7 @@ onMount(async () => {
   });
 
 const unlisten = await listen('vault_locked', ({ payload }) => {
+    playLockSound();
     closeAllPanelsAndModals();
     clearAuthTimeout();
     authMode = 'locked';
