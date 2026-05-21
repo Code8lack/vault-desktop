@@ -1,6 +1,6 @@
 # LockStep Password Vault
 
-> I am loathe to trust other people with my sensitive data, especially with all the data breaches that have occurred of late, and apps not being as secure as advertised, so I decided to build a password app for myself. Well aware of how rusty I was, my intention was to develop it beyond a level where I was fully convinced I wouldn't lose access to my passwords, and to a state in which I felt I wouldn't expose any vulnerabilities.
+> I am loath to trust other people with my sensitive data, especially with all the data breaches that have occurred of late, so I decided to build a password app for myself. While I presently have no intention to make this public, any future release would only happen after extensive third-party testing.
 
 ---
 
@@ -13,6 +13,31 @@
 | Frontend | Svelte, JavaScript, HTML, CSS |
 | Bridge | Tauri (Rust) |
 | Backend | Erlang (proprietary — authored by me, not included in this repository) |
+
+---
+
+## 🔒 Security
+
+All sensitive data is encrypted and protected using industry-standard methods.
+
+| Protection | Detail |
+|---|---|
+| Encryption | AES-256-CTR |
+| Key Derivation | PBKDF2-SHA512 · 1,000,000 iterations |
+| Integrity Verification | HMAC-SHA512 per entry |
+| Salt | 128-bit cryptographically secure random · unique per vault |
+| Envelope Encryption | Per-entry Data Encryption Key (DEK) · wrapped by master key |
+| IV Generation | Unique 128-bit IV per encrypted field |
+| Timing-Safe Comparison | All hash comparisons use constant-time equality |
+| 2-Factor Authentication | TOTP (RFC 6238) with backup codes |
+| Brute-force Protection | Progressive lockout · hard lock on repeated failures |
+| Inactivity Lock | Auto-lock with tiered warnings (green → orange → red) |
+| Recovery | Single-use encrypted recovery code · deleted immediately on use |
+| Password History | Reuse detection across previous master passwords |
+| Audit Log | Tamper-evident log of all sensitive operations |
+| Core Dump Protection | Disabled at startup on Unix / macOS |
+| Security Levels | DEFCON tiered KDF mode · upgradeable to Argon2 |
+| Automatic Backup | Vault backed up automatically on master password change |
 
 ---
 
