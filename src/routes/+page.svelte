@@ -4356,10 +4356,10 @@ setFavoritesAll: (newSet) => {
 
   .slide-out-actions {
     position: relative;
+    top: 10%;
     display: flex;
     padding: 4px 8px;
     border-radius: 6px;
-    /*border: 1px solid rgba(255, 255, 255, 0.1);*/
     transform: translateX(125px); /*entry direction*/
     opacity: 1;
     pointer-events: none;
