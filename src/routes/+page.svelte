@@ -4377,6 +4377,10 @@ setFavoritesAll: (newSet) => {
 
 
   .cat-chip-section {
+    display: flex;
+    flex-direction: column;
+    height: 90px;
+    overflow: auto;
     width: 100%;
     padding: 10px 12px 6px;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
