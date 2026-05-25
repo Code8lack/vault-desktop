@@ -2700,7 +2700,11 @@ setFavoritesAll: (newSet) => {
                         class:cat-chip-active={getCategoryApplied(cat)}
                         type="button"
                         title={cat.label}
-                        on:click|stopPropagation={() => toggleCategory(cat)}
+                        on:click|stopPropagation={() => {
+                          toggleCategory(cat);
+                          closeServiceOverlay();
+                          openActionMenu = false;
+                        }}
                       >
                         {cat.emoji}
                       </button>
