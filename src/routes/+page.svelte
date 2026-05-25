@@ -2646,12 +2646,13 @@ setFavoritesAll: (newSet) => {
                   >✕</button>
                 </div>
 
-                <div class="nerd-data-row" style="--t-count: 2; --t-height: 30px; --t-speed: 10s;">
+                <div class="nerd-data-row" style="--t-count: 3; --t-height: 30px; --t-speed: 10s;">
                   <div class="v-ticker label">
                     <div class="v-ticker-wrapper">
-                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)} / 5</span>
-                      <span>Entropy:{selectedEntropy || 0} Bits</span>
-                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)} / 5</span>
+                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
+                      <span>Entropy:</span>
+                      <span class="bits">{selectedEntropy || 0} Bits</span>
+                      <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
                     </div>
                   </div>
 
@@ -4588,12 +4589,9 @@ setFavoritesAll: (newSet) => {
     height: var(--t-height);
     line-height: var(--t-height);
     white-space: nowrap;
-  }
-
-  /* Right-align the values ticker for a cleaner look */
-  .v-ticker-wrapper > span {
-    text-align: right;
+    text-align: center;
     display: block;
+    font-size: 1.3em;
   }
 
   @keyframes v-slide {
