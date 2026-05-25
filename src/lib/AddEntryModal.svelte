@@ -102,8 +102,10 @@
                     class="cat-picker-row"
                     class:cat-row-active={isCatApplied(cat.emoji)}
                     type="button"
-                    on:click|stopPropagation={() => toggleChip(cat.emoji)}
-                  >
+                    on:click|stopPropagation={() => {
+                      toggleChip(cat.emoji);
+                      showCatPicker = false;
+                    }}>
                     <span class="cat-row-emoji">{cat.emoji}</span>
                     <span class="cat-row-label">{cat.label}</span>
                     {#if isCatApplied(cat.emoji)}
