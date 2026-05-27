@@ -65,6 +65,7 @@
   let selectedWebsite = '';
   let selectedNote = '';
   let selectedIconPath = '';
+  let selectedBreachStatus = 'Unknown';
   let latestIconPath = '';
   let infoTimeoutId: number | undefined = undefined;
   let prevAuthMode: AuthMode = 'locked';
@@ -226,6 +227,11 @@ $: {
       selectedStrengthScore = 0;
       selectedEntropy = 0;
   }
+}
+
+$: if (selectedService) {
+    selectedBreachStatus = 'Checking...';
+    invoke('dispatch_to_erlang', { message: 'breach_check:' + selectedService });
 }
 
 $: heatStack = getHeatStackColors(selectedStrengthScore || 0);
@@ -2646,23 +2652,28 @@ setFavoritesAll: (newSet) => {
                   >✕</button>
                 </div>
 
-                <div class="nerd-data-row" style="--t-count: 3; --t-height: 30px; --t-speed: 10s;">
+                <div class="nerd-data-row" style="--t-count: 4; --t-height: 30px; --t-speed: 12s;">
                   <div class="v-ticker label">
                     <div class="v-ticker-wrapper">
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
-                      <span>Entropy:</span>
-                      <span class="bits">{selectedEntropy || 0} Bits</span>
+                      <span>Entropy: {selectedEntropy || 0} Bits</span>
+                      <span>Breach: {selectedBreachStatus || 'Unknown'}</span>
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
                     </div>
                   </div>
-
                   <div class="heat-stack">
                     {#each heatStack as color}
                       <div class="bar" style="background-color: {color};"></div>
                     {/each}
                   </div>
-                  
                 </div>
+
+                <div class="heat-stack">
+                  {#each heatStack as color}
+                    <div class="bar" style="background-color: {color};"></div>
+                  {/each}
+                </div>
+                  
               </div>
             {/if}
         </div><!--fields-container CLOSE-->          
@@ -4549,8 +4560,6 @@ setFavoritesAll: (newSet) => {
     border-radius: 1px;
   }
 
-  /* ================== Generalized vertical slider for DRY reuse ================ */
-
   .nerd-data-row {
     margin: 10px 0 0 7px;
     width: 80%;
@@ -4591,12 +4600,18 @@ setFavoritesAll: (newSet) => {
     white-space: nowrap;
     text-align: center;
     display: block;
-    font-size: 1.3em;
+    font-size: 0.7em;
   }
 
   @keyframes v-slide {
     0% { transform: translateY(0); }
     100% { transform: translateY(calc(-1 * var(--t-count) * var(--t-height))); }
+  }
+
+  .vault-count {
+    border: 1px solid fucshia;
+    height: 50px;
+    width: 50px;
   }
 
 /* ==================================== BACKUP CODE ======================================= */
