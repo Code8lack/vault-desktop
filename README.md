@@ -34,6 +34,7 @@ All sensitive data is encrypted and protected using industry-standard methods.
 | Inactivity Lock | Auto-lock with tiered warnings (green → orange → red) |
 | Recovery | Single-use encrypted recovery code · deleted immediately on use |
 | Password History | Reuse detection across previous master passwords |
+| Password Breach Check | Checks online database for known breached passwords |
 | Audit Log | Tamper-evident log of all sensitive operations |
 | Core Dump Protection | Disabled at startup on Unix / macOS |
 | Security Levels | DEFCON tiered KDF mode · upgradeable to Argon2 |
