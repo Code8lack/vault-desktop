@@ -59,6 +59,8 @@ All sensitive data is encrypted and protected using industry-standard methods.
 ## In Development
 - **Nerd Stats carousel** — expanding the current password strength stat into a rotating panel of vault analytics
 - **Image addition** — attaching images to vault entries
+- **Silo Mode** - Cloud stash functionality
+- **Custom Icons** - ...to replace system emojis
 ---
 
 ## Testing & Development Status
