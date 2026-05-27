@@ -2652,11 +2652,12 @@ setFavoritesAll: (newSet) => {
                   >✕</button>
                 </div>
 
-                <div class="nerd-data-row" style="--t-count: 4; --t-height: 30px; --t-speed: 12s;">
+                <div class="nerd-data-row" style="--t-count: 4; --t-height: 20px; --t-speed: 10s;">
                   <div class="v-ticker label">
                     <div class="v-ticker-wrapper">
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
-                      <span>Entropy: {selectedEntropy || 0} Bits</span>
+                      <span>Entropy:</span>
+                      <span class="bits">{selectedEntropy || 0} Bits</span>
                       <span>Breach: {selectedBreachStatus || 'Unknown'}</span>
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
                     </div>
@@ -4577,7 +4578,7 @@ setFavoritesAll: (newSet) => {
     font-family: monaco, monospace;
     letter-spacing: -0.9px;
     width: 57%;
-    height: 30px; /* Match --t-height */
+    height: 20px; /* Match --t-height */
     overflow: hidden;
   }
 
@@ -4600,7 +4601,7 @@ setFavoritesAll: (newSet) => {
     white-space: nowrap;
     text-align: center;
     display: block;
-    font-size: 0.7em;
+    font-size: 1em;
   }
 
   @keyframes v-slide {
@@ -4608,11 +4609,6 @@ setFavoritesAll: (newSet) => {
     100% { transform: translateY(calc(-1 * var(--t-count) * var(--t-height))); }
   }
 
-  .vault-count {
-    border: 1px solid fucshia;
-    height: 50px;
-    width: 50px;
-  }
 
 /* ==================================== BACKUP CODE ======================================= */
 
