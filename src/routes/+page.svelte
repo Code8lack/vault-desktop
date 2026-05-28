@@ -30,10 +30,7 @@
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
   import { playUnlockSound, playLockSound } from '$lib/sounds.js';
 
-
-
   export let serviceName: string;
-  export let options;
 
   type AuthMode = 'locked' | 'authenticating' | 'authenticated' | 'changing_verify' | 'changing_new' | 'recovery' | 'error';
   
