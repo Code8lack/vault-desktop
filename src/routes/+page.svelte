@@ -2656,7 +2656,9 @@ setFavoritesAll: (newSet) => {
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
                       <span>Entropy:</span>
                       <span class="bits">{selectedEntropy || 0} Bits</span>
-                      <span>Breach: {selectedBreachStatus || 'Unknown'}</span>
+                      <span class:breached={selectedBreachStatus === 'Breached'}>
+                        Breach: {selectedBreachStatus || 'Unknown'}
+                      </span>
                       <span>Rating: {(selectedStrengthScore / 2).toFixed(1)}/5</span>
                     </div>
                   </div>
@@ -4600,6 +4602,11 @@ setFavoritesAll: (newSet) => {
     text-align: center;
     display: block;
     font-size: 1em;
+  }
+
+  .breached {
+    color: yellow;
+    text-transform: uppercase;
   }
 
   @keyframes v-slide {
