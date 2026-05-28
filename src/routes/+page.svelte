@@ -33,6 +33,7 @@
 
 
   export let serviceName: string;
+  export let options;
 
   type AuthMode = 'locked' | 'authenticating' | 'authenticated' | 'changing_verify' | 'changing_new' | 'recovery' | 'error';
   
@@ -65,7 +66,6 @@
   let selectedWebsite = '';
   let selectedNote = '';
   let selectedIconPath = '';
-  let selectedBreachStatus = 'Unknown';
   let latestIconPath = '';
   let infoTimeoutId: number | undefined = undefined;
   let prevAuthMode: AuthMode = 'locked';
@@ -198,6 +198,8 @@
   let quickNewLabel  = '';
   let pendingServiceRename = null;
   let showForcePrompt = false;
+  let selectedBreachStatus = 'Unknown';
+
 
 
 //=============================== REACTIVES =========================================//
@@ -227,11 +229,6 @@ $: {
       selectedStrengthScore = 0;
       selectedEntropy = 0;
   }
-}
-
-$: if (selectedService) {
-    selectedBreachStatus = 'Checking...';
-    invoke('dispatch_to_erlang', { message: 'breach_check:' + selectedService });
 }
 
 $: heatStack = getHeatStackColors(selectedStrengthScore || 0);
@@ -509,6 +506,7 @@ function persistentFocus(node, isBlocked) {
 
 
   function syncState(updatedOptions) {
+    selectedBreachStatus = updatedOptions.selectedBreachStatus || 'Unknown';
     console.log("[SYNC] hotZone value:", updatedOptions.hotZone);
     authMode = updatedOptions.authMode;
     authStep = updatedOptions.authStep;
