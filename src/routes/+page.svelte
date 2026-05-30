@@ -201,6 +201,10 @@
 
 //=============================== REACTIVES =========================================//
 
+$: if (isPreAuth && maskedInputEl) {
+  requestAnimationFrame(() => maskedInputEl.focus());
+}
+
 $: isPreAuth = ['locked', 'password', 'recovery'].includes(authMode);
 
 $: headerMinimized = (authMode === 'authenticated');
