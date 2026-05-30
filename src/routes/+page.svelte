@@ -29,6 +29,9 @@
   import CategoryModal from '$lib/CategoryModal.svelte';
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
   import { playUnlockSound, playLockSound } from '$lib/sounds.js';
+  import { Globe } from 'lucide-svelte';
+
+
 
   export let serviceName: string;
 
@@ -79,7 +82,6 @@
   let recoveryInProgress = false;
   let dot = '•';
   let showAddEntryPanel = false;
-  let showNerdPanel = localStorage.getItem('nerdPanelActive') === 'true';
   let newServiceName = '';
   let newPassword = '';
   let newUsername = '';
@@ -104,8 +106,7 @@
   let selectedStrengthScore = 0.0;
   let currentPlaceholderIndex = 0;
   let animatedPlaceholder = ''; 
-  let currentTimeout = parseInt(localStorage.getItem('vaultTimeout'));
-  let timeoutMinutes = Math.floor(currentTimeout / 60000);
+  let timeoutMinutes = 0;
   let showTimeoutModal = false;
   let showBackupModal = false;
   let securityReport = null;
@@ -181,8 +182,6 @@
   let lockedBackground = 'bruce';
   let usePasswordRecovery = false;
   let showLockBgPicker = false;
-  let lockBg = localStorage.getItem('vltmt-lock-bg') ?? '';
-  let lockContrastMode = localStorage.getItem('vltmt-lock-contrast') ?? 'dark';
   let flashingBtn = null; // holds the id string of the button currently flashing
   let serviceListEl;
   let listReady = false;
@@ -197,6 +196,10 @@
   let showForcePrompt = false;
   let selectedBreachStatus = 'Unknown';
 
+  let showNerdPanel = false;
+  let currentTimeout = 0;
+  let lockBg = '';
+  let lockContrastMode = 'dark';
 
 
 //=============================== REACTIVES =========================================//
@@ -1866,6 +1869,14 @@ function persistentFocus(node, isBlocked) {
 
 onMount(async () => {
 
+  // ---- localStorage hydration ----
+  showNerdPanel = localStorage.getItem('nerdPanelActive') === 'true';
+  currentTimeout = parseInt(localStorage.getItem('vaultTimeout'));
+  timeoutMinutes = Math.floor(currentTimeout / 60000);
+  lockBg = localStorage.getItem('vltmt-lock-bg') ?? '';
+  lockContrastMode = localStorage.getItem('vltmt-lock-contrast') ?? 'dark';
+  // --------------------------------
+
   // Listen for reset_to_list_view (panel reset on lock)
   unlistenReset = await listen('reset_to_list_view', () => {
     
@@ -2612,7 +2623,8 @@ setFavoritesAll: (newSet) => {
                 }
               }} 
               title="Click to open website"
-            >🌐
+            >
+             <Globe size={30} class="globe-icon"/>
             </button>
           </div>
           <!-- URL -->
@@ -4118,7 +4130,7 @@ setFavoritesAll: (newSet) => {
     display:inline-flex;
     left: 0;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 300;
     padding: 5px;
   }
 
@@ -4148,6 +4160,10 @@ setFavoritesAll: (newSet) => {
 
   .note {
     margin-top: 5px;
+  }
+
+  .globe-icon {
+    font-weight: 200;
   }
 
   .fields-container {/*=============== VIEWPORT ==================*/
