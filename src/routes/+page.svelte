@@ -492,7 +492,7 @@ function persistentFocus(node, isBlocked) {
     update(newBlocked) {
       isBlocked = newBlocked;
       if (!isBlocked) {
-        node.focus();
+        setTimeout(() => node.focus(), 100);
       }
     },
     destroy() {
