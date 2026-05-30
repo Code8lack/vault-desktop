@@ -342,15 +342,19 @@ input:focus {
 /* ----------------------------------------- CSS SCOPING ----------------------------------------------- */
 
 [data-theme="strawberries-cream"] .result-item:hover,
-[data-theme="strawberries-cream"] .result-item.highlighted, /* Added theme scope here */
-[data-theme="strawberries-cream"] .pre-auth-input .main-login button:hover { /* Added theme scope here */
+[data-theme="strawberries-cream"] .result-item.highlighted,
+[data-theme="strawberries-cream"] .pre-auth-input .main-login button:hover { 
   color: var(--bg-secondary) !important;
   background: indianred;
 }
 
 [data-theme="brutalist"] .result-item:hover,
-[data-theme="brutalist"] .result-item.highlighted { /* Added theme scope here */
+[data-theme="brutalist"] .result-item.highlighted { 
   background-color: lightblue;
+}
+
+[data-theme="brutalist"] .globe-icon {
+  color: #c00;
 }
 
 [data-theme="gold"] .cat-picker-title,

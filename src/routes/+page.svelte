@@ -4107,7 +4107,7 @@ setFavoritesAll: (newSet) => {
     top: 0;
   }
 
-  .site-go-to{
+  .site-go-to {
     position: absolute;
     bottom:0;
     border-radius: 8px;
