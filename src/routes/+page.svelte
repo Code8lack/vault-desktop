@@ -29,7 +29,10 @@
   import CategoryModal from '$lib/CategoryModal.svelte';
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
   import { playUnlockSound, playLockSound } from '$lib/sounds.js';
-  import { Globe } from 'lucide-svelte';
+  //import { Globe } from '@lucide-svelte';
+  import Globe from '@lucide/svelte/icons/globe';
+  import Key from '@lucide/svelte/icons/key';
+  import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
 
 
 
@@ -2372,15 +2375,19 @@ setFavoritesAll: (newSet) => {
               clearMessages();
               openMenu();
             }}
-          >Menu</button>
+            ><PanelsTopLeft size={17} />
+            <span> Menu</span>
+          </button>
 
           <button
-            class="btn tertiary"
+            class="btn"
             on:click={() => {
               clearMessages();
               lockVault();
             }}
-          >🔒 Lock</button>
+          ><Key size={17}/>
+          <span> Lock</span>
+          </button>
           {#if selectedService !== null}
             <button 
               class="btn back back-button-visible" 
@@ -3975,6 +3982,11 @@ setFavoritesAll: (newSet) => {
     font-weight: 500;
   }
 
+  .button-wrapper .btn span {/*both lines reqd. to raise text*/
+    display: inline-block;
+    transform: translateY(-3px);
+  }
+
   /* ================================= LIST VIEW WRAPPERS ==================================== */
 
   .container.list-view .header-wrapper.minimized {
@@ -4062,7 +4074,6 @@ setFavoritesAll: (newSet) => {
     gap: 12px;
   }
 
-
   .item-panel {
     display: flex;
     flex-direction: column;
@@ -4130,7 +4141,7 @@ setFavoritesAll: (newSet) => {
     display:inline-flex;
     left: 0;
     font-size: 15px;
-    font-weight: 300;
+    font-weight: 250;
     padding: 5px;
   }
 
@@ -4160,10 +4171,6 @@ setFavoritesAll: (newSet) => {
 
   .note {
     margin-top: 5px;
-  }
-
-  .globe-icon {
-    font-weight: 200;
   }
 
   .fields-container {/*=============== VIEWPORT ==================*/
