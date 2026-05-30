@@ -32,6 +32,7 @@
   //import { Globe } from '@lucide-svelte';
   import Globe from '@lucide/svelte/icons/globe';
   import Key from '@lucide/svelte/icons/key';
+  import TableProperties from '@lucide/svelte/icons/table-properties';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
 
 
@@ -2421,7 +2422,7 @@ setFavoritesAll: (newSet) => {
 
                   setTimeout(() => navVisible = true, 500);
                 }, 200);
-              }}>← List
+              }}><TableProperties size={17}/> <span>List</span>
             </button>
           {/if}
           </div><!--row button-wrapper-->
@@ -3979,7 +3980,7 @@ setFavoritesAll: (newSet) => {
   }
 
   .button-wrapper.minimized button {
-    font-weight: 500;
+    font-weight: 300;
   }
 
   .button-wrapper .btn span {/*both lines reqd. to raise text*/
