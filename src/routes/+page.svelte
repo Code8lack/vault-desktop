@@ -3762,6 +3762,10 @@ setFavoritesAll: (newSet) => {
   transition: opacity 0.2s ease;
 }
 
+.input-group:not(.is-typing) .input {
+  caret-color: transparent;
+}
+
 .input-group.has-value .placeholder {
   display: none;
   opacity: 0;
