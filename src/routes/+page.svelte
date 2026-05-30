@@ -208,11 +208,11 @@
 
 //=============================== REACTIVES =========================================//
 
-$: if (isPreAuth && maskedInputEl) {
-  requestAnimationFrame(() => maskedInputEl.focus());
-}
-
 $: isPreAuth = ['locked', 'password', 'recovery'].includes(authMode);
+
+$: if (isPreAuth && maskedInputEl) {
+  tick().then(() => maskedInputEl.focus());
+}
 
 $: headerMinimized = (authMode === 'authenticated');
 $: changingNew = (authMode === 'changing_new');
@@ -783,6 +783,7 @@ function persistentFocus(node, isBlocked) {
   }
 
   function handleMasterPasswordInput(event: Event) {
+    isFocused = true;
     const inputElement = event.target as HTMLInputElement;
     const newValue = inputElement.value;
 
@@ -2133,7 +2134,7 @@ setFavoritesAll: (newSet) => {
       <!-- Normal locked password -->
       <div class="pre-auth-input"><!--trans panel-->
         <div class="master-input-container">
-          <div class="input-group" class:has-value={displayPassword !== ''}>
+          <div class="input-group" class:has-value={displayPassword !== ''} class:is-typing={isFocused}>
             <div class="placeholder">
               <div class="placeholder-slide-wrapper">
                 <span>AES-256-CTR Encryption</span>
@@ -2169,7 +2170,7 @@ setFavoritesAll: (newSet) => {
                 bind:value={displayPassword}
                 on:click={() => { if (displayPassword !== '') peekPassword = !peekPassword; }}
                 on:input={handleMasterPasswordInput}
-                on:focus={() => isFocused = true}
+                on:focus={() => { /* suppress — isFocused set on input instead */ }}
                 on:blur={() => { isFocused = false; startMasking(); }}
                 on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('verify'); verifyPassword(); } }}
                 placeholder=""
@@ -3755,8 +3756,7 @@ setFavoritesAll: (newSet) => {
   transition: opacity 0.1s ease; /* Makes the disappear effect smoother */
 }
 
-/* When the input is focused, hide the sliding div */
-.input-group:focus-within .placeholder {
+.input-group.is-typing .placeholder {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease;
