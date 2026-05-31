@@ -2118,7 +2118,7 @@ setFavoritesAll: (newSet) => {
   <div class="header-wrapper-parent" class:changeNew={changingNew} class:changeVerify={changingVerify}>
     <div class="header-wrapper" class:minimized={headerMinimized} class:adjusted={headerAdjusted} class:list-adjusted={headerListAdjusted} class:locked-screen={authMode === 'locked' || authMode === 'password' || authMode === 'recovery'}  class:totp-challenge={authMode === 'totp_challenge'}>
       {#if authMode === 'locked' || selectedService !== null || selectedService == null}
-        <h1 class="main-header">LockStep<span></span></h1>
+        <h1 class="main-header">Vaultimate<span></span></h1>
         <h3>{selectedService === null && authMode === 'authenticated' ? 'Industrial-Grade Security' : 'Hyper-Robust Industrial-Grade Security'}</h3>
       {/if}
     </div>
@@ -2378,7 +2378,7 @@ setFavoritesAll: (newSet) => {
               clearMessages();
               openMenu();
             }}
-            ><PanelsTopLeft size={17} />
+            ><PanelsTopLeft size={20}  strokeWidth={1.5} />
             <span> Menu</span>
           </button>
 
@@ -2388,7 +2388,7 @@ setFavoritesAll: (newSet) => {
               clearMessages();
               lockVault();
             }}
-          ><Key size={17}/>
+          ><Key size={20}  strokeWidth={1.5}/>
           <span> Lock</span>
           </button>
           {#if selectedService !== null}
@@ -2424,7 +2424,7 @@ setFavoritesAll: (newSet) => {
 
                   setTimeout(() => navVisible = true, 500);
                 }, 200);
-              }}><TableProperties size={17}/> <span>List</span>
+              }}><TableProperties size={20}  strokeWidth={1.5}/> <span>List</span>
             </button>
           {/if}
           </div><!--row button-wrapper-->
@@ -2463,7 +2463,7 @@ setFavoritesAll: (newSet) => {
             {:else if backupError}
               ⚠️
             {:else}
-              <Cloudy size={24} strokeWidth={1.0} class="cloud"/>
+              <Cloudy size={24} strokeWidth={1.25} class="cloud"/>
             {/if}
           </button>
           <div class="search-bar">
@@ -2634,7 +2634,7 @@ setFavoritesAll: (newSet) => {
               }} 
               title="Click to open website"
             >
-             <Globe size={30} class="globe-icon"/>
+             <Globe size={30} strokeWidth={1.2} class="globe-icon"/>
             </button>
           </div>
           <!-- URL -->
@@ -3985,7 +3985,7 @@ setFavoritesAll: (newSet) => {
   }
 
   .button-wrapper.minimized button {
-    font-weight: 300;
+    font-weight: 500;
   }
 
   .button-wrapper .btn span {/*both lines reqd. to raise text*/
