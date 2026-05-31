@@ -186,6 +186,7 @@ color: var(--text-secondary);
   transition: opacity 300ms ease;
 }
 
+
 /* ================ INPUT ================= */
 
 input {
@@ -353,7 +354,7 @@ input:focus {
   background-color: lightblue;
 }
 
-[data-theme="brutalist"] .globe-icon {
+[data-theme="brutalist"] .globe-icon,
   color: #c00;
 }
 

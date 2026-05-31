@@ -29,12 +29,14 @@
   import CategoryModal from '$lib/CategoryModal.svelte';
   import { resolveSearchTerm, nav } from '$lib/categoryStore.js';
   import { playUnlockSound, playLockSound } from '$lib/sounds.js';
-  //import { Globe } from '@lucide-svelte';
-  import Globe from '@lucide/svelte/icons/globe';
-  import Key from '@lucide/svelte/icons/key';
-  import TableProperties from '@lucide/svelte/icons/table-properties';
-  import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
 
+//================== Lucide Imports ==================//
+
+  import Key from '@lucide/svelte/icons/key';
+  import Globe from '@lucide/svelte/icons/globe';
+  import Cloudy from '@lucide/svelte/icons/cloudy';
+  import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
+  import TableProperties from '@lucide/svelte/icons/table-properties';
 
 
   export let serviceName: string;
@@ -2461,7 +2463,7 @@ setFavoritesAll: (newSet) => {
             {:else if backupError}
               ⚠️
             {:else}
-              ☁️
+              <Cloudy size={24} strokeWidth={1.0} class="cloud"/>
             {/if}
           </button>
           <div class="search-bar">
@@ -5159,6 +5161,8 @@ setFavoritesAll: (newSet) => {
     height: 95%;
     min-width: 40px;
   }
+
+
 
   /* --------------------------------------- SEARCH ---------------------------------------- */
 
