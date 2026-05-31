@@ -1,6 +1,7 @@
 export function playUnlockSound({
-  src = null,
+  //src = null,
   //src = '/sounds/unlock.wav',
+  src = '/sounds/welcome.mp3',
   notes = [523.25, 659.25, 783.99],
   spacing = 0.1,
   gain = 0.18,
