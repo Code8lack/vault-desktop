@@ -2170,7 +2170,6 @@ setFavoritesAll: (newSet) => {
                 bind:value={displayPassword}
                 on:click={() => { if (displayPassword !== '') peekPassword = !peekPassword; }}
                 on:input={handleMasterPasswordInput}
-                on:focus={() => { /* suppress — isFocused set on input instead */ }}
                 on:blur={() => { isFocused = false; startMasking(); }}
                 on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('verify'); verifyPassword(); } }}
                 placeholder=""
