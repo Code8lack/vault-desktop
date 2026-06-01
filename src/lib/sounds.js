@@ -1,7 +1,7 @@
 export function playUnlockSound({
   //src = null,
   //src = '/sounds/unlock.wav',
-  src = '/sounds/welcome.mp3',
+  src = '/sounds/11-Freya.mp3',
   notes = [523.25, 659.25, 783.99],
   spacing = 0.1,
   gain = 0.18,
@@ -41,7 +41,7 @@ export function playUnlockSound({
 export function playLockSound({
   src = '/sounds/lock.wav',
   //src = null,
-  notes = [783.99, 659.25, 523.25],
+  //notes = [783.99, 659.25, 523.25],
   spacing = 0.1,
   gain = 0.18,
   decay = 0.35,
