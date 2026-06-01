@@ -2550,7 +2550,7 @@ setFavoritesAll: (newSet) => {
                   {#each deficits as deficit}
                     <div class="deficit-row">
                       {#if deficit.iconName === 'TriangleAlert'}
-                        <TriangleAlert size={22} stroke-width={1.7} />
+                        <TriangleAlert size={24} stroke-width={2.5} />
                       {:else if deficit.iconName === 'ShieldOff'}
                         <ShieldOff size={17} />
                       {:else if deficit.iconName === 'Bug'}
@@ -4821,11 +4821,7 @@ setFavoritesAll: (newSet) => {
     padding: 5px 0 10px;
   }
 
-  .deficit-row svg {
-    color: red !important;
-  }
-
-  .report-box.deficits .deficit-label {
+  .report-box.deficits .deficit-label {/*Static Security Box Label Text*/
     position: relative;
     top: -5px;
   }
