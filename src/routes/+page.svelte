@@ -2548,10 +2548,10 @@ setFavoritesAll: (newSet) => {
               {:else}
                 <div class="report-box deficits">
                   {#each deficits as deficit}
-                    <li>
+                    <div class="deficit-row">
                       {#if deficit.iconName === 'TriangleAlert'}
                         <TriangleAlert size={22} stroke-width={1.7} />
-                        {:else if deficit.iconName === 'ShieldOff'}
+                      {:else if deficit.iconName === 'ShieldOff'}
                         <ShieldOff size={17} />
                       {:else if deficit.iconName === 'Bug'}
                         <Bug size={17} />
@@ -2560,8 +2560,8 @@ setFavoritesAll: (newSet) => {
                       {:else if deficit.iconName === 'DatabaseBackup'}
                         <DatabaseBackup size={17} />
                       {/if}
-                      <span>{deficit.label}</span>
-                    </li>
+                      <span class="deficit-label">{deficit.label}</span>
+                    </div>
                   {/each}
                 </div>
               {/if}
@@ -4769,10 +4769,6 @@ setFavoritesAll: (newSet) => {
     padding: 15px 0;
   }
 
-  .security-static h3 label {
-    color: blue;
-    margin-top: -10px;
-  }
 
   .report-circle {
     border: 1px solid #666;
@@ -4823,6 +4819,15 @@ setFavoritesAll: (newSet) => {
     margin: 0 0 5px;
     max-height: 20px;
     padding: 5px 0 10px;
+  }
+
+  .deficit-row svg {
+    color: red !important;
+  }
+
+  .report-box.deficits .deficit-label {
+    position: relative;
+    top: -5px;
   }
 
   .security-static p {
