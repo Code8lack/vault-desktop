@@ -33,10 +33,16 @@
 //================== Lucide Imports ==================//
 
   import Key from '@lucide/svelte/icons/key';
+  import Bug from '@lucide/svelte/icons/bug';
   import Globe from '@lucide/svelte/icons/globe';
   import Cloudy from '@lucide/svelte/icons/cloudy';
+  import ShieldX from '@lucide/svelte/icons/shield-x';
+  import ShieldOff from '@lucide/svelte/icons/shield-off';
+  import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
+  import DatabaseBackup from '@lucide/svelte/icons/database-backup';
   import TableProperties from '@lucide/svelte/icons/table-properties';
+
 
 
   export let serviceName: string;
@@ -2518,14 +2524,14 @@ setFavoritesAll: (newSet) => {
           </div>
           <div class="security-static">
             <h3>Security Status</h3>
+
             {#if securityReport}
               {@const deficits = [
-                !securityReport.totp_enabled && { icon: '⚠️', label: '2FA Disabled' },
-                securityReport.nif_status !== 'active' && { icon: '❌', label: 'Memory Protection Inactive' },
-                securityReport.core_dumps !== 'disabled' && { icon: '⚠️', label: 'Core Dumps Enabled' },
-                securityReport.permissions_status !== 'ok' && { icon: '⚠️', label: 'Permissions Issue' },
-                securityReport.backup_msg === false && { icon: '🚨', label: 'Backups Stale or Missing' },
-
+                !securityReport.totp_enabled && { iconName: 'TriangleAlert', label: '2FA Disabled' },
+                securityReport.nif_status !== 'active' && { iconName: 'ShieldOff', label: 'Memory Protection Inactive' },
+                securityReport.core_dumps !== 'disabled' && { iconName: 'Bug', label: 'Core Dumps Enabled' },
+                securityReport.permissions_status !== 'ok' && { iconName: 'ShieldX', label: 'Permissions Issue' },
+                securityReport.backup_msg === false && { iconName: 'DatabaseBackup', label: 'Backups Stale or Missing' },
               ].filter(Boolean)}
 
               <div class="report-circle">
@@ -2541,8 +2547,21 @@ setFavoritesAll: (newSet) => {
                 </div>
               {:else}
                 <div class="report-box deficits">
-                  {#each deficits as d}
-                    <p>{d.icon} {d.label}</p>
+                  {#each deficits as deficit}
+                    <li>
+                      {#if deficit.iconName === 'TriangleAlert'}
+                        <TriangleAlert size={22} stroke-width={1.7} />
+                        {:else if deficit.iconName === 'ShieldOff'}
+                        <ShieldOff size={17} />
+                      {:else if deficit.iconName === 'Bug'}
+                        <Bug size={17} />
+                      {:else if deficit.iconName === 'ShieldX'}
+                        <ShieldX size={17} />
+                      {:else if deficit.iconName === 'DatabaseBackup'}
+                        <DatabaseBackup size={17} />
+                      {/if}
+                      <span>{deficit.label}</span>
+                    </li>
                   {/each}
                 </div>
               {/if}
@@ -4748,6 +4767,11 @@ setFavoritesAll: (newSet) => {
     width: 100%;
     top: 0;
     padding: 15px 0;
+  }
+
+  .security-static h3 label {
+    color: blue;
+    margin-top: -10px;
   }
 
   .report-circle {
