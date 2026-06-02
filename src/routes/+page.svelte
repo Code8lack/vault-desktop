@@ -40,6 +40,7 @@
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Settings from '@lucide/svelte/icons/settings';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
+  import HatGlasses from '@lucide/svelte/icons/hat-glasses';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
   import DatabaseBackup from '@lucide/svelte/icons/database-backup';
@@ -2883,10 +2884,10 @@ setFavoritesAll: (newSet) => {
                 </button>
                 <button
                   class="menu-item" on:click={() => toggleSubMenu('settings')}>
-                  <span>⚙️</span> Settings<span class="sub-menu-indicators" style="color: {activeSubMenu === 'settings' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'settings' ? '-' : '+'}</span>
+                  <span><Settings size={24} strokeWidth={1.25}/></span> Settings<span class="sub-menu-indicators" style="color: {activeSubMenu === 'settings' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'settings' ? '-' : '+'}</span>
                 </button>
                 <button class="menu-item" on:click={() => toggleSubMenu('security')}>
-                  👮🏻‍♂️ Security <span class="sub-menu-indicators" style="color: {activeSubMenu === 'security' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'security' ? '-' : '+'}</span>
+                <HatGlasses size={24} strokeWidth={1.25}/> Security <span class="sub-menu-indicators" style="color: {activeSubMenu === 'security' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'security' ? '-' : '+'}</span>
                 </button>
                 <button class="menu-item" on:click={() => { closeMenu(); lockVault(); }}>
                   🔒 Lock Vault
