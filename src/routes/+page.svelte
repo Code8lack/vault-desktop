@@ -38,6 +38,7 @@
   import Plus from '@lucide/svelte/icons/plus';
   import Brain from '@lucide/svelte/icons/brain';
   import Globe from '@lucide/svelte/icons/globe';
+  import Timer from '@lucide/svelte/icons/timer';
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Settings from '@lucide/svelte/icons/settings';
@@ -3017,7 +3018,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={openTimeoutSettings}
                     >
-                      ⏱️ Timeout
+                      <Timer size={24} strokeWidth={1.25}/> Timeout
                     </button>
                     <button
                       class="menu-item"
