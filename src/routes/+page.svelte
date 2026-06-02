@@ -35,6 +35,7 @@
   import Key from '@lucide/svelte/icons/key';
   import Bug from '@lucide/svelte/icons/bug';
   import Lock from '@lucide/svelte/icons/lock';
+  import Plus from '@lucide/svelte/icons/plus';
   import Brain from '@lucide/svelte/icons/brain';
   import Globe from '@lucide/svelte/icons/globe';
   import Cloudy from '@lucide/svelte/icons/cloudy';
@@ -2874,7 +2875,7 @@ setFavoritesAll: (newSet) => {
 
               <div class="menu-items" class:slide-left={activeSubMenu !== ''}>
                 <button class="menu-item" on:click={(e) => { e.stopPropagation(); showAddEntryPanel = true; closeMenu(); openAddEntry(); }}>
-                  ➕ Add Entry
+                  <Plus size={24} strokeWidth={1.25}/> Add Entry
                 </button>
                 <button class="menu-item" on:click={() => {
                   showNerdPanel = !showNerdPanel;
