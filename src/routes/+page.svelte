@@ -42,6 +42,7 @@
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Settings from '@lucide/svelte/icons/settings';
+  import KeySquare from '@lucide/svelte/icons/key-square';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
   import HatGlasses from '@lucide/svelte/icons/hat-glasses';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
@@ -3039,7 +3040,7 @@ setFavoritesAll: (newSet) => {
                         closeMenu();
                       }}
                     >
-                      🔑 Recovery Code
+                      <KeySquare size={24} strokeWidth={1.25}/> Recovery Code
                     </button>
                     <button
                       class="menu-item"
