@@ -34,6 +34,7 @@
 
   import Key from '@lucide/svelte/icons/key';
   import Bug from '@lucide/svelte/icons/bug';
+  import Lock from '@lucide/svelte/icons/lock';
   import Brain from '@lucide/svelte/icons/brain';
   import Globe from '@lucide/svelte/icons/globe';
   import Cloudy from '@lucide/svelte/icons/cloudy';
@@ -2880,17 +2881,17 @@ setFavoritesAll: (newSet) => {
                   localStorage.setItem('nerdPanelActive', String(showNerdPanel));
                   setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false)
                 }}>
-                  <Brain size={24} strokeWidth={1.25}/> Nerd Stats<span class="nerd-tick sub-menu-indicators">{showNerdPanel === true ? '✅' : ''}</span>
+                  <Brain size={24} strokeWidth={1.25}/>  Nerd Stats<span class="nerd-tick">{showNerdPanel === true ? '✅' : ''}</span>
                 </button>
                 <button
                   class="menu-item" on:click={() => toggleSubMenu('settings')}>
-                  <span><Settings size={24} strokeWidth={1.25}/></span> Settings<span class="sub-menu-indicators" style="color: {activeSubMenu === 'settings' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'settings' ? '-' : '+'}</span>
+                  <span><Settings size={24} strokeWidth={1.25}/></span>  Settings<span class="sub-menu-indicators" style="color: {activeSubMenu === 'settings' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'settings' ? '-' : '+'}</span>
                 </button>
                 <button class="menu-item" on:click={() => toggleSubMenu('security')}>
-                <HatGlasses size={24} strokeWidth={1.25}/> Security <span class="sub-menu-indicators" style="color: {activeSubMenu === 'security' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'security' ? '-' : '+'}</span>
+                <HatGlasses size={24} strokeWidth={1.25}/>  Security <span class="sub-menu-indicators" style="color: {activeSubMenu === 'security' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'security' ? '-' : '+'}</span>
                 </button>
                 <button class="menu-item" on:click={() => { closeMenu(); lockVault(); }}>
-                  🔒 Lock Vault
+                  <Lock size={24} strokeWidth={1.25}/>  Lock Vault
                 </button>
               </div>
             </div><!--menu-panel-->
@@ -4361,11 +4362,17 @@ setFavoritesAll: (newSet) => {
     padding-top: 2px;
   }
 
-  .sub-menu-indicators {
-    float: right;
+  .sub-menu-indicators,.nerd-tick {
+    position: relative;
     font-size: 20px;
     font-type: bold;
+    left: 150px;
   }
+
+  .nerd-tick {
+    left: 130px
+  }
+
 
 
 /*-------------------------------------- SERVICE ITEM (MINI) MENU ----------------------------------------------*/
@@ -4558,10 +4565,6 @@ setFavoritesAll: (newSet) => {
 
 
 /*================================ NERD STATS =========================================*/
-
-  .nerd-tick{
-    margin-right: -5px;
-  }
 
   .nerd-stats{
     border-radius: 8px; 
