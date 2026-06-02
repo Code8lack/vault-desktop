@@ -34,9 +34,11 @@
 
   import Key from '@lucide/svelte/icons/key';
   import Bug from '@lucide/svelte/icons/bug';
+  import Brain from '@lucide/svelte/icons/brain';
   import Globe from '@lucide/svelte/icons/globe';
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
+  import Settings from '@lucide/svelte/icons/settings';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
@@ -2877,7 +2879,7 @@ setFavoritesAll: (newSet) => {
                   localStorage.setItem('nerdPanelActive', String(showNerdPanel));
                   setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false)
                 }}>
-                🧠 Nerd Stats<span class="nerd-tick sub-menu-indicators">{showNerdPanel === true ? '✅' : ''}</span>
+                  <Brain size={24} strokeWidth={1.25}/> Nerd Stats<span class="nerd-tick sub-menu-indicators">{showNerdPanel === true ? '✅' : ''}</span>
                 </button>
                 <button
                   class="menu-item" on:click={() => toggleSubMenu('settings')}>
@@ -4330,6 +4332,10 @@ setFavoritesAll: (newSet) => {
   }
 
   .menu-item {
+    padding-bottom: 5px; 
+    /* Ensure the button centers items vertically if needed */
+    display: flex;
+    align-items: center;
     padding: 12px 20px;
     border-radius: 8px;
     font-size: 14px;
