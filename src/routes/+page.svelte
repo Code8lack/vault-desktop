@@ -4334,10 +4334,11 @@ setFavoritesAll: (newSet) => {
   }
 
   .menu-item {
-    padding-bottom: 5px; 
-    /* Ensure the button centers items vertically if needed */
     display: flex;
     align-items: center;
+    gap: 12px;
+    width: 100%; 
+    padding-bottom: 5px; 
     padding: 12px 20px;
     border-radius: 8px;
     font-size: 14px;
@@ -4366,11 +4367,11 @@ setFavoritesAll: (newSet) => {
     position: relative;
     font-size: 20px;
     font-type: bold;
-    left: 150px;
+    margin-left: auto;
   }
 
   .nerd-tick {
-    left: 130px
+    left: 10px;
   }
 
 
