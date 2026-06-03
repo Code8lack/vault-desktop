@@ -44,6 +44,7 @@
   import Settings from '@lucide/svelte/icons/settings';
   import KeySquare from '@lucide/svelte/icons/key-square';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
+  import SwatchBook from '@lucide/svelte/icons/swatch-book';
   import HatGlasses from '@lucide/svelte/icons/hat-glasses';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
@@ -3046,7 +3047,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={() => toggleSubMenu('appearance')}
                     >
-                      🎨 Appearance <span class="sub-menu-indicators" style="color: {activeSubMenu === 'appearance' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'appearance' ? '-' : '+'}</span>
+                      <SwatchBook size={24} strokeWidth={1.25}/> Appearance <span class="sub-menu-indicators" style="color: {activeSubMenu === 'appearance' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'appearance' ? '-' : '+'}</span>
                     </button>
                     <button
                       class="menu-item"
