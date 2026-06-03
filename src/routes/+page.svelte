@@ -3064,7 +3064,7 @@ setFavoritesAll: (newSet) => {
                         showBackupModal = true;
                       }}
                     >
-                      ☁️ Backup Settings
+                    <Cloudy size={24} strokeWidth={1.0} class="cloud"/> Backup Settings
                     </button>
    
                     <button
