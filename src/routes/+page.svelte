@@ -44,11 +44,14 @@
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Settings from '@lucide/svelte/icons/settings';
+  import FolderUp from '@lucide/svelte/icons/folder-up';
   import KeySquare from '@lucide/svelte/icons/key-square';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
   import SwatchBook from '@lucide/svelte/icons/swatch-book';
   import HatGlasses from '@lucide/svelte/icons/hat-glasses';
+  import LayersPlus from '@lucide/svelte/icons/layers-plus';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
+  import CloudBackup from '@lucide/svelte/icons/cloud-backup';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
   import DatabaseBackup from '@lucide/svelte/icons/database-backup';
   import TableProperties from '@lucide/svelte/icons/table-properties';
@@ -2971,20 +2974,20 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={() => {openImportPicker()}}
                     >
-                      ⤵️ Import
+                      <Import size={24} strokeWidth={1.25}/> Import
                     </button>                    
                     <button
                       class="menu-item"
                       on:click={() => { handleExport() }}
                     >
-                      ⤴️ Export
+                      <FolderUp size={24} strokeWidth={1.25}/> Export
                     </button>
                     <button
                       class="menu-item"
                       on:click={() => {startBatchUpdate()
                       }}
                     >
-                      🪣 Batch Update Icons
+                      <LayersPlus size={24} strokeWidth={1.25}/> Batch Update Icons
                     </button>
                   </div>
                 </div>
@@ -3065,7 +3068,7 @@ setFavoritesAll: (newSet) => {
                         showBackupModal = true;
                       }}
                     >
-                    <Cloudy size={24} strokeWidth={1.0} class="cloud"/> Backup Settings
+                    <CloudBackup size={24} strokeWidth={1.25} class="cloud"/> Backup Settings
                     </button>
    
                     <button
