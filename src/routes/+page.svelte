@@ -40,6 +40,7 @@
   import Brain from '@lucide/svelte/icons/brain';
   import Globe from '@lucide/svelte/icons/globe';
   import Timer from '@lucide/svelte/icons/timer';
+  import Import from '@lucide/svelte/icons/import';
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Settings from '@lucide/svelte/icons/settings';
@@ -3071,7 +3072,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={() => toggleSubMenu('import/export')}
                     >
-                      ↔️ Import/Export <span class="sub-menu-indicators" style="color: {activeSubMenu === 'appearance' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'appearance' ? '-' : '+'}</span>
+                      <Import size={24} strokeWidth={1.25}/> Import/Export <span class="sub-menu-indicators" style="color: {activeSubMenu === 'appearance' ? '#ff4b4b' : '#FFA54B'};">{activeSubMenu === 'appearance' ? '-' : '+'}</span>
                     </button>
                   </div>
                 </div>
