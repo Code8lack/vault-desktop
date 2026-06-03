@@ -50,8 +50,8 @@
   import SwatchBook from '@lucide/svelte/icons/swatch-book';
   import HatGlasses from '@lucide/svelte/icons/hat-glasses';
   import LayersPlus from '@lucide/svelte/icons/layers-plus';
-  import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import CloudBackup from '@lucide/svelte/icons/cloud-backup';
+  import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
   import DatabaseBackup from '@lucide/svelte/icons/database-backup';
   import TableProperties from '@lucide/svelte/icons/table-properties';
@@ -4838,7 +4838,7 @@ setFavoritesAll: (newSet) => {
     gap: 15px;
   }
 
-  .report-box.deficits p, .security-static p {
+  .security-static p {
     margin: 0 0 5px;
     max-height: 20px;
     padding: 5px 0 10px;
@@ -4848,7 +4848,8 @@ setFavoritesAll: (newSet) => {
     position: relative;
     top: -5px;
     padding: 5px;
-    background: rgba(155, 155, 155, 0.2);
+    background: rgba(230, 212, 103, 1);
+    border: 1px solid #999;
     border-radius: 6px;
   }
 
@@ -4875,7 +4876,6 @@ setFavoritesAll: (newSet) => {
 
   .report-circle,
   .security-static h3,
-  .report-box.deficits p, 
   .security-static p {
     background: rgba(125, 125, 125, 0.35);
   }
