@@ -4833,6 +4833,9 @@ setFavoritesAll: (newSet) => {
   .report-box.deficits {
     overflow-y: auto;
     max-height: 100px;
+    display: flex;
+    flex-display: column;
+    gap: 15px;
   }
 
   .report-box.deficits p, .security-static p {
@@ -4844,6 +4847,9 @@ setFavoritesAll: (newSet) => {
   .report-box.deficits .deficit-label {/*Static Security Box Label Text*/
     position: relative;
     top: -5px;
+    padding: 5px;
+    background: rgba(155, 155, 155, 0.2);
+    border-radius: 6px;
   }
 
   .security-static p {
