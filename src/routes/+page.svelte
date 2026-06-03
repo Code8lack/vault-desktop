@@ -34,6 +34,7 @@
 
   import Key from '@lucide/svelte/icons/key';
   import Bug from '@lucide/svelte/icons/bug';
+  import Tags from '@lucide/svelte/icons/tags';
   import Lock from '@lucide/svelte/icons/lock';
   import Plus from '@lucide/svelte/icons/plus';
   import Brain from '@lucide/svelte/icons/brain';
@@ -3053,7 +3054,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={showCategoryModal}
                     >
-                      📑 Categories 
+                      <Tags size={24} strokeWidth={1.25}/> Categories 
                     </button>                
                     <button
                       class="menu-item"
