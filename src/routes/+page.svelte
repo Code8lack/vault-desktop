@@ -44,6 +44,7 @@
   import Import from '@lucide/svelte/icons/import';
   import Cloudy from '@lucide/svelte/icons/cloudy';
   import ShieldX from '@lucide/svelte/icons/shield-x';
+  import Palette from '@lucide/svelte/icons/palette';
   import Settings from '@lucide/svelte/icons/settings';
   import FolderUp from '@lucide/svelte/icons/folder-up';
   import KeySquare from '@lucide/svelte/icons/key-square';
@@ -3005,7 +3006,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={() => { showThemePicker = true; closeMenu(); }}
                     >
-                      🎨 Themes
+                    <Palette size={24} strokeWidth={1.25} class="palette"/>Themes
                     </button>
                     <button
                       class="menu-item"
