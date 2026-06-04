@@ -4848,7 +4848,7 @@ setFavoritesAll: (newSet) => {
     position: relative;
     top: -5px;
     padding: 5px;
-    background: rgba(230, 212, 103, 1);
+    background: rgba(200, 200, 200, 0.2);
     border: 1px solid #999;
     border-radius: 6px;
   }
