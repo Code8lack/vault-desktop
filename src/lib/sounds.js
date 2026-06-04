@@ -39,8 +39,8 @@ export function playUnlockSound({
 }
 
 export function playLockSound({
-  //src = '/sounds/lock.mp3',
-  src = null,
+  src = '/sounds/lock.mp3',
+  //src = null,
   notes = [783.99, 659.25, 523.25],
   spacing = 0.1,
   gain = 0.18,
