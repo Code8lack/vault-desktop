@@ -38,6 +38,7 @@
   import Lock from '@lucide/svelte/icons/lock';
   import Plus from '@lucide/svelte/icons/plus';
   import Brain from '@lucide/svelte/icons/brain';
+  import Check from '@lucide/svelte/icons/check';
   import Globe from '@lucide/svelte/icons/globe';
   import Timer from '@lucide/svelte/icons/timer';
   import Import from '@lucide/svelte/icons/import';
@@ -2890,7 +2891,8 @@ setFavoritesAll: (newSet) => {
                   localStorage.setItem('nerdPanelActive', String(showNerdPanel));
                   setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false)
                 }}>
-                  <Brain size={24} strokeWidth={1.25}/>  Nerd Stats<span class="nerd-tick">{showNerdPanel === true ? '✅' : ''}</span>
+                  <Brain size={24} strokeWidth={1.25}/>  Nerd Stats
+                  <span class="nerd-tick">{#if showNerdPanel}<Check size={24} strokeWidth={1.25} class="cloud"/>{/if}</span>
                 </button>
                 <button
                   class="menu-item" on:click={() => toggleSubMenu('settings')}>
