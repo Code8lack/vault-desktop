@@ -47,6 +47,7 @@
   import Palette from '@lucide/svelte/icons/palette';
   import Settings from '@lucide/svelte/icons/settings';
   import FolderUp from '@lucide/svelte/icons/folder-up';
+  import Wallpaper from '@lucide/svelte/icons/wallpaper';
   import KeySquare from '@lucide/svelte/icons/key-square';
   import ShieldOff from '@lucide/svelte/icons/shield-off';
   import SwatchBook from '@lucide/svelte/icons/swatch-book';
@@ -3012,7 +3013,7 @@ setFavoritesAll: (newSet) => {
                       class="menu-item"
                       on:click={() => { showLockBgPicker = true; closeMenu(); }}
                     >
-                      🏞️ Lock Screen Background
+                    <Wallpaper size={24} strokeWidth={1.25} class="wallpaper"/> Lock Screen Background
                     </button>
                   </div>
                 </div>
