@@ -58,6 +58,7 @@
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
   import DatabaseBackup from '@lucide/svelte/icons/database-backup';
   import TableProperties from '@lucide/svelte/icons/table-properties';
+  import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
 
 
 
@@ -2930,7 +2931,7 @@ setFavoritesAll: (newSet) => {
                         closeMenu();
                       }}
                     >
-                      📱 2FA Settings
+                      <MonitorSmartphone size={24} strokeWidth={1.25}/> 2FA Settings
                     </button>
 
                     <button
