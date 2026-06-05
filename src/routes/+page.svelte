@@ -35,6 +35,7 @@
   import Key from '@lucide/svelte/icons/key';
   import Bug from '@lucide/svelte/icons/bug';
   import Tags from '@lucide/svelte/icons/tags';
+  import Flag from '@lucide/svelte/icons/flag';
   import Lock from '@lucide/svelte/icons/lock';
   import Plus from '@lucide/svelte/icons/plus';
   import Brain from '@lucide/svelte/icons/brain';
@@ -2942,7 +2943,7 @@ setFavoritesAll: (newSet) => {
                         closeMenu();
                       }}
                     >
-                      🔎 Security Report
+                      <Flag size={24} strokeWidth={1.25}/> Security Report
                     </button>
 
                     <button
