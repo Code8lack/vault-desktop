@@ -55,6 +55,7 @@
   import HatGlasses from '@lucide/svelte/icons/hat-glasses';
   import LayersPlus from '@lucide/svelte/icons/layers-plus';
   import CloudBackup from '@lucide/svelte/icons/cloud-backup';
+  import BicepsFlexed from '@lucide/svelte/icons/biceps-flexed';
   import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
   import PanelsTopLeft from '@lucide/svelte/icons/panels-top-left';
   import DatabaseBackup from '@lucide/svelte/icons/database-backup';
@@ -2954,7 +2955,7 @@ setFavoritesAll: (newSet) => {
                         startChange();
                       }}
                     >
-                      🦾 Change Password
+                      <BicepsFlexed size={24} strokeWidth={1.25}/> Change Password
                     </button>
                     <button
                       class="menu-item"
