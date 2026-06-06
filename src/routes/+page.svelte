@@ -44,6 +44,7 @@
   import Timer from '@lucide/svelte/icons/timer';
   import Import from '@lucide/svelte/icons/import';
   import Cloudy from '@lucide/svelte/icons/cloudy';
+  import Package from '@lucide/svelte/icons/package';
   import ShieldX from '@lucide/svelte/icons/shield-x';
   import Palette from '@lucide/svelte/icons/palette';
   import Settings from '@lucide/svelte/icons/settings';
@@ -235,11 +236,6 @@
 
 //=============================== REACTIVES =========================================//
 
-$: isPreAuth = ['locked', 'password', 'recovery'].includes(authMode);
-
-$: if (isPreAuth && maskedInputEl) {
-  tick().then(() => maskedInputEl.focus());
-}
 
 $: headerMinimized = (authMode === 'authenticated');
 $: changingNew = (authMode === 'changing_new');
@@ -303,6 +299,12 @@ $: headerListAdjusted = (authMode === 'authenticated' && selectedService == null
 
 /* ======================= SEARCH ============================= */
 
+$: isPreAuth = ['locked', 'password', 'recovery'].includes(authMode);
+
+$: if (isPreAuth && maskedInputEl) {
+  tick().then(() => maskedInputEl.focus());
+}
+
 $: resolvedSearch = resolveSearchTerm(searchTerm.trim());
 
 // Reactive search logic: filter sortedEntries if searchTerm is 2+ chars
@@ -331,7 +333,10 @@ $: if (searchResults) {
   collapsed = false;
 }
 
-$: modalOpen = showBackupModal || showSecurityModal || showSearchModal || showAddEntryPanel;
+$: modalOpen = showBackupModal || showSecurityModal || showSearchModal || showAddEntryPanel || showDeletePanel;
+
+
+/* ============================================================================================= */
 
 $: if (peekPassword && peekInputEl) {
   requestAnimationFrame(() => peekInputEl.focus());
@@ -541,6 +546,8 @@ function persistentFocus(node, isBlocked) {
 
 
   function syncState(updatedOptions) {
+    if (updatedOptions.showSearchModal !== undefined) showSearchModal = updatedOptions.showSearchModal;
+    if (updatedOptions.searchTerm !== undefined) searchTerm = updatedOptions.searchTerm;
     selectedBreachStatus = updatedOptions.selectedBreachStatus || 'Unknown';
     console.log("[SYNC] hotZone value:", updatedOptions.hotZone);
     authMode = updatedOptions.authMode;
@@ -1822,7 +1829,6 @@ function persistentFocus(node, isBlocked) {
 
     try {
       await sendToBackend(`delete_entry:${serviceToDelete}`);
-
       showDeletePanel = false;
 
     } catch (err) {
@@ -2071,6 +2077,7 @@ onDestroy(() => {
   }
   favorites = favorites; 
 }, 
+
 setFavoritesAll: (newSet) => {
   favorites = newSet; 
 },
@@ -2965,7 +2972,7 @@ setFavoritesAll: (newSet) => {
                         closeMenu();
                       }}
                     >
-                      🫙 Silo Mode
+                      <Package size={24} strokeWidth={1.25}/> Silo Mode
                     </button>
                   </div>
                 </div>
