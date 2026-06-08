@@ -10,8 +10,6 @@
   export let totpSecret = '';
   export let backupCodes = [];
   export let setMessage = () => {};
-  export let startWatchdog = () => {};
-  export let clearWatchdog = () => {};
   export let onclose = () => {};   // ← keep this if used, or switch to dispatched 'close'
 
   let totpCode = '';
