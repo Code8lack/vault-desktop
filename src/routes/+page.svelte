@@ -2904,7 +2904,7 @@ setFavoritesAll: (newSet) => {
                   setMessage(showNerdPanel ? "🧠 Nerd Stats Active." : "🧠 Nerd Stats Inactive.", false, false)
                 }}>
                   <Brain size={24} strokeWidth={1.25}/>  Nerd Stats
-                  <span class="nerd-tick">{#if showNerdPanel}<Check size={24} strokeWidth={1.25} class="cloud"/>{/if}</span>
+                  <span class="nerd-tick">{#if showNerdPanel}<Check size={20} strokeWidth={1.25} class="cloud"/>{/if}</span>
                 </button>
                 <button
                   class="menu-item" on:click={() => toggleSubMenu('settings')}>
