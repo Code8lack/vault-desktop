@@ -10,12 +10,13 @@
     onclose = () => {}
   } = $props();
 
-  let timeoutMinutes = $state(initialMinutes);
+  let timeoutMinutes = $state(2);        // ← default only
   let timeoutError = $state('');
 
+  // Sync prop changes + reset when modal opens
   $effect(() => {
     if (showTimeoutModal) {
-      timeoutMinutes = initialMinutes;
+      timeoutMinutes = initialMinutes;   // now safe inside effect
       timeoutError = '';
     }
   });

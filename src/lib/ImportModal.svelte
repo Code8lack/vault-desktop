@@ -6,7 +6,6 @@
   export let showImportModal: boolean;
   export let importHeaders: string[]  = [];
   export let importSample: string[]   = [];
-  export let importFilePath: string   = '';
   export let submitImportMapping: (mapping: Record<string, number>) => void;
 
   const dispatch = createEventDispatcher();
