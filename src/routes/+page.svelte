@@ -4342,12 +4342,20 @@ setFavoritesAll: (newSet) => {
     border: none;
     font-size: 24px;
     cursor: pointer;
-    padding: 8px;
+    /* ↓ Changed: fixed square + flex centering replaces padding */
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
   }
 
   .menu-close:hover {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
     color: rgba(245, 15, 15, 1); 
+    border-radius: 50%;
   }
 
   .menu-items {
