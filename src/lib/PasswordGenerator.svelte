@@ -87,48 +87,63 @@
       <!-- ── Length slider ── -->
       <div class="pg-row">
         <label class="pg-label" for="pg-length">Length — <strong>{length}</strong></label>
-        <div
-          class="pg-track-wrap"
-          on:pointerdown={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
-            const update = (ev: PointerEvent) => {
-              const pct = clamp((ev.clientX - rect.left) / rect.width, 0, 1);
-              length = Math.round(8 + pct * (32 - 8));
-            };
-            update(e);
-            e.currentTarget.setPointerCapture(e.pointerId);
-            const up = () => window.removeEventListener('pointermove', update);
-            window.addEventListener('pointermove', update);
-            window.addEventListener('pointerup', up, { once: true });
-          }}
-        >
-          <div class="pg-track">
-            <div class="pg-fill"  style="width: {((length - 8) / (32 - 8)) * 100}%"></div>
-            <div class="pg-thumb" style="left:  {((length - 8) / (32 - 8)) * 100}%"></div>
-          </div>
+      <div
+        class="pg-track-wrap"
+        role="slider"
+        tabindex="0"
+        aria-label="Password length"
+        aria-valuemin="8"
+        aria-valuemax="32"
+        aria-valuenow={length}
+        on:keydown={(e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') length = Math.min(32, length + 1);
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') length = Math.max(8, length - 1);
+        }}
+        on:pointerdown={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+          const update = (ev: PointerEvent) => {
+            const pct = clamp((ev.clientX - rect.left) / rect.width, 0, 1);
+            length = Math.round(8 + pct * (32 - 8));
+          };
+          update(e);
+          e.currentTarget.setPointerCapture(e.pointerId);
+          const up = () => window.removeEventListener('pointermove', update);
+          window.addEventListener('pointermove', update);
+          window.addEventListener('pointerup', up, { once: true });
+        }}
+      >
+        <div class="pg-track">
+          <div class="pg-fill" style="width: {((length - 8) / (32 - 8)) * 100}%"></div>
+          <div class="pg-thumb" style="left: {((length - 8) / (32 - 8)) * 100}%"></div>
         </div>
       </div>
-
-
      <!-- ── Entropy slider ── -->
-      <div class="pg-row">
-        <label class="pg-label" for="pg-entropy">Entropy — <strong>{entropyBits} bits</strong></label>
-        <div
-          class="pg-track-wrap"
-          on:pointerdown={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
-            const update = (ev: PointerEvent) => {
-              entropyLevel = Math.round(clamp((ev.clientX - rect.left) / rect.width, 0, 1) * 100);
-            };
-            update(e);
-            e.currentTarget.setPointerCapture(e.pointerId);
-            const up = () => window.removeEventListener('pointermove', update);
-            window.addEventListener('pointermove', update);
-            window.addEventListener('pointerup', up, { once: true });
-          }}
-        >
+      <div
+        class="pg-track-wrap"
+        role="slider"
+        tabindex="0"
+        aria-label="Entropy level"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow={entropyLevel}
+        on:keydown={(e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') entropyLevel = Math.min(100, entropyLevel + 1);
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') entropyLevel = Math.max(0, entropyLevel - 1);
+        }}
+        on:pointerdown={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+          const update = (ev: PointerEvent) => {
+            entropyLevel = Math.round(clamp((ev.clientX - rect.left) / rect.width, 0, 1) * 100);
+          };
+          update(e);
+          e.currentTarget.setPointerCapture(e.pointerId);
+          const up = () => window.removeEventListener('pointermove', update);
+          window.addEventListener('pointermove', update);
+          window.addEventListener('pointerup', up, { once: true });
+        }}
+      >
           <div class="pg-track">
             <div class="pg-fill"  style="width: {entropyLevel}%"></div>
             <div class="pg-thumb" style="left:  {entropyLevel}%"></div>
