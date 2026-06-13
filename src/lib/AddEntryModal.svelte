@@ -16,6 +16,7 @@
   export let strengthScore: number = 0;
   export let feedbackMessage: string = '';
   export let setMessage: (msg: string, isError?: boolean, isTimeout?: boolean) => void;
+  export let closeBtnClass: string = '';
 
   import { hidePlaceholder } from './action.js';
   import { categories } from './categoryStore.js';
@@ -58,7 +59,13 @@
 
 {#if showAddEntryPanel}
   <form class="display-panel add-entry-panel" on:submit|preventDefault={submitNewEntry}>
-    <button class="panel-close" type="button" aria-label="Close panel" on:click={() => { close(); noAdd(); }}>✕</button>
+    <button 
+      class="{closeBtnClass} modal-close-pos" 
+      type="button" 
+      aria-label="Close panel" 
+      on:click={() => { close(); noAdd(); }}
+      >✕</button>
+
 
     <fieldset style="border: none;">
       <legend class="header-title">{editMode ? 'Edit Entry' : 'Add Entry'}</legend>
@@ -90,7 +97,7 @@
             <!-- Picker popover -->
             <div class="cat-picker-popover" role="dialog" aria-label="Category picker">
               <button
-                class="panel-close cat-picker-close"
+                class="{closeBtnClass} picker-close-pos"
                 type="button"
                 aria-label="Close category picker"
                 on:click|stopPropagation={() => showCatPicker = false}
@@ -407,19 +414,21 @@
     flex-direction: column;
   }
 
-  .cat-picker-close {
+
+/* Only handle positioning layout here; design is inherited from the parent! */
+  .modal-close-pos {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1;
+  }
+
+  .picker-close-pos {
     position: absolute;
     top: 4px;
     right: 8px;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 4px;
   }
 
-  .cat-picker-close:hover { color: mediumvioletred; }
 
   .cat-picker-title {
     font-size: 1em;

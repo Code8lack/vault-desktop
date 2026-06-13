@@ -63,8 +63,6 @@
   import TableProperties from '@lucide/svelte/icons/table-properties';
   import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
 
-
-
   export let serviceName: string;
 
   type AuthMode = 'locked' | 'authenticating' | 'authenticated' | 'changing_verify' | 'changing_new' | 'recovery' | 'error';
@@ -3535,7 +3533,7 @@ setFavoritesAll: (newSet) => {
   {handlePasswordPaste}
   validationError={validationError}
   feedbackMessage={feedbackMessage}
-  on:close={() => {
+  closeBtnClass="menu-close" on:close={() => {
     showAddEntryPanel = false;
     editMode = false;
     editingServiceName = '';
@@ -4336,7 +4334,8 @@ setFavoritesAll: (newSet) => {
     font-weight: 350;
   }
 
-  .menu-close {
+/* ↓ Changed: both selectors wrapped in :global() so child buttons receive these styles */
+:global(.menu-close) {
     align-self: flex-end;
     background: transparent;
     border: none;
@@ -4350,14 +4349,13 @@ setFavoritesAll: (newSet) => {
     justify-content: center;
     margin-bottom: 20px;
   }
-
-  .menu-close:hover {
+  :global(.menu-close:hover) {
     background: var(--bg-secondary);
     border: 1px solid var(--border-primary);
     color: rgba(245, 15, 15, 1); 
     border-radius: 50%;
   }
-
+  
   .menu-items {
     display: flex;
     flex-direction: column;
