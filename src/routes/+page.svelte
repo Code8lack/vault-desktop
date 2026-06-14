@@ -1214,6 +1214,7 @@ function persistentFocus(node, isBlocked) {
 
   async function processSelection(selected) {
     if (!selected) return;
+    if (selected.type === 'theme') return;
     if (selected.type === 'menu') {
       selected.action();
       showSearchModal = false;
@@ -4355,7 +4356,7 @@ setFavoritesAll: (newSet) => {
     color: rgba(245, 15, 15, 1); 
     border-radius: 50%;
   }
-  
+
   .menu-items {
     display: flex;
     flex-direction: column;
@@ -5252,6 +5253,9 @@ setFavoritesAll: (newSet) => {
     font-size: 0.75em;
     font-weight: 300;
   }
+
+/* ======================================================================================================== */
+
 
   .timeout-indicator {
     position: fixed;
