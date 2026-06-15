@@ -225,6 +225,7 @@
   let pendingServiceRename = null;
   let showForcePrompt = false;
   let selectedBreachStatus = 'Unknown';
+  let cursorPosition = 0;
 
   let showNerdPanel = false;
   let currentTimeout = 0;
@@ -2503,8 +2504,16 @@ setFavoritesAll: (newSet) => {
               type="text"
               bind:value={searchTerm}
               use:persistentFocus={modalOpen || showCategoryModalOpen || showNewCatForm}
-              on:input={() => { if (searchTerm.trim()) showSearchModal = true; }}
-              on:keydown={handleSearchKeydown}
+              on:input={(e) => { 
+                cursorPosition = e.currentTarget.selectionStart; 
+                if (searchTerm.trim()) showSearchModal = true; 
+              }}
+              on:keydown={(e) => {
+                handleSearchKeydown(e);
+                // Fast-track the cursor sync on the next tick so auto-repeat works smoothly
+                setTimeout(() => { cursorPosition = e.currentTarget.selectionStart; }, 0);
+              }}
+              on:click={(e) => cursorPosition = e.currentTarget.selectionStart}
               placeholder="&nbsp;Enter search term"
               spellcheck="false"
             />
@@ -3548,6 +3557,7 @@ setFavoritesAll: (newSet) => {
   on:change={(e) => activeThemeId = e.detail}
   {searchTerm}
   {searchResults}
+  {cursorPosition}
   on:refocus={() => document.getElementById('search-vault').focus()}
   on:select={(e) => processSelection(e.detail)}
   collapsed={collapsed}

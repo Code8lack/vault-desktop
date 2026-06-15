@@ -10,7 +10,12 @@
   export let searchResults = [];
   export let highlightedIndex = -1;
   export let collapsed = false;
+  export let cursorPosition = 0;
 
+
+// Reactively slice the text into what sits before and after the cursor
+  $: leftText = searchTerm.slice(0, cursorPosition);
+  $: rightText = searchTerm.slice(cursorPosition);
   $: if (searchResults) highlightedIndex = -1;
   $: if (!searchTerm) showSearchModal = false;
 
@@ -44,7 +49,9 @@
           on:mousedown|preventDefault={() => (showSearchModal = false)}
         >✕</button>
 
-        <p>{searchTerm}</p>
+        <p class="search-text-display">
+          {leftText}<span class="fake-caret"></span>{rightText}
+        </p>
 
         {#if taggedResults.length > 0 && !collapsed}
           <div class="search-bar-mirror">
@@ -127,6 +134,8 @@
     font-size: 1.4em;
     font-weight: 350;
     width: 425px;
+    /* Force a highly visible dark text color and cursor */
+    caret-color: red; /* Directly forces the blinking cursor to be black */
   }
 
   .search-bar-mirror {
@@ -205,4 +214,34 @@
     border-left: 3px solid rgba(0, 0, 0, 0.18);
     padding-left: 7px;
   }
+
+/* ============================= MOCK CARET STYLES ==================================== */
+
+.search-text-display {
+  border-bottom: 1px solid #777;
+  font-size: 0.9em;
+  color: darkslategray;
+  display: flex;
+  align-items: center;
+  white-space: pre; /* Crucial: Preserves trailing spaces if you type spacebar */
+}
+
+.fake-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em; /* Tracks the font size naturally */
+  background-color: #4a90e2; /* Choose your preferred cursor color (e.g., Mac blue) */
+  margin-left: -1px;
+  margin-right: -1px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { background-color: transparent }
+  50% { background-color: #4a90e2; }
+}
+
+
+
+
 </style>
