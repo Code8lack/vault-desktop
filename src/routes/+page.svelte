@@ -2554,8 +2554,14 @@ setFavoritesAll: (newSet) => {
               }}
               on:keydown={(e) => {
                 handleSearchKeydown(e);
-                // Fast-track the cursor sync on the next tick so auto-repeat works smoothly
-                setTimeout(() => { cursorPosition = e.currentTarget.selectionStart; }, 0);
+                
+                // 🛡️ Capture the element reference synchronously before the next tick
+                const target = e.currentTarget;
+                setTimeout(() => { 
+                  if (target) {
+                    cursorPosition = target.selectionStart; 
+                  }
+                }, 0);
               }}
               on:click={(e) => cursorPosition = e.currentTarget.selectionStart}
               placeholder="&nbsp;Enter search term"
