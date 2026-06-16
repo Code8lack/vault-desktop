@@ -2216,7 +2216,15 @@ setFavoritesAll: (newSet) => {
                 class="input"
                 bind:this={maskedInputEl}
                 bind:value={displayPassword}
-                on:click={() => { if (displayPassword !== '') peekPassword = !peekPassword; }}
+                on:focus={() => { isFocused = true; }}
+                on:click={() => { 
+                  // If not empty and you want to toggle, keep this, 
+                  // but ensure it doesn't block focus
+                  if (displayPassword !== '') {
+                    // Logic for toggling peek
+                  }
+                  maskedInputEl?.focus(); 
+                }}
                 on:input={handleMasterPasswordInput}
                 on:blur={() => { isFocused = false; startMasking(); }}
                 on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('verify'); verifyPassword(); } }}
@@ -3895,6 +3903,7 @@ setFavoritesAll: (newSet) => {
     height: var(--input-field-height);
     display: flex;
     flex-direction: column;
+    pointer-events: none;
     animation: slidePlaceholder var(--total-animation-time) linear infinite;
   }
 
