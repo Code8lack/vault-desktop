@@ -228,7 +228,7 @@
 
 .fake-caret {
   display: inline-block;
-  width: 2px;
+  width: 1px;
   height: 1.2em; /* Tracks the font size naturally */
   background-color: #4a90e2; /* Choose your preferred cursor color (e.g., Mac blue) */
   margin-left: -1px;
@@ -238,7 +238,7 @@
 
 @keyframes blink {
   from, to { background-color: transparent }
-  50% { background-color: #4a90e2; }
+  50% { background-color: floralwhite; }
 }
 
 

@@ -503,15 +503,10 @@ function handleSearchKeydown(e) {
     e.preventDefault();
     const targetIndex = highlightedIndex === -1 ? 0 : highlightedIndex;
     const result = searchResults[targetIndex];
-    if (result._isTheme) {
-      applyTheme(result._themeId);
-      activeThemeId = result._themeId;
-      showSearchModal = false;
-    } else {
-      processSelection(result);
+    processSelection(result);
     }
   }
-}
+
 
 function persistentFocus(node, isBlocked) {
   // Kickstart focus
@@ -944,6 +939,15 @@ function persistentFocus(node, isBlocked) {
 
 
   function handleSelect(result) {
+  
+    if (result._isTheme) {
+      // Handle theme-specific selection here
+      applyTheme(result._themeId); 
+    } else {
+      // Handle standard service selection
+      selectService(result);
+    }
+
     showSearchModal = false;
     searchTerm = '';
     highlightedIndex = -1;
@@ -1215,13 +1219,23 @@ function persistentFocus(node, isBlocked) {
 
   async function processSelection(selected) {
     if (!selected) return;
-    if (selected.type === 'theme') return;
+    
+    // Handle theme selection (now works for clicks!)
+    if (selected.type === 'theme' || selected._isTheme) {
+      applyTheme(selected._themeId);
+      activeThemeId = selected._themeId;
+      showSearchModal = false;
+      searchTerm = ''; // Clean up search text
+      return;
+    }
+    
     if (selected.type === 'menu') {
       selected.action();
       showSearchModal = false;
       searchTerm = '';
       return;
     }
+    
     // service selection unchanged ↓
     selectedService = selected.label;
     
