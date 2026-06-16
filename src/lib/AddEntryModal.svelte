@@ -197,6 +197,30 @@
             rows="3"
           ></textarea>
         </div>
+
+        <div class="input-group">
+          <label for="custom-image-upload" class="field-label">Attachment / Custom Image</label>
+          <div class="upload-wrapper">
+            <input 
+              id="custom-image-upload" 
+              type="file" 
+              accept="image/*" 
+              on:change={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (evt) => {
+                    // Send this string/base64 to your backend handler or attach to your data fields
+                    newNote = JSON.stringify({ note: newNote, attachment: evt.target.result });
+                    setMessage("Image staging successful!", false);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+          </div>
+        </div>
+
       </div><!--add-entry-form-->
       <div class="panel-buttons crud">
         <!-- ── add the Generate button ── -->
@@ -265,7 +289,7 @@
     flex-direction: column;
     align-items: center;/*ESSENTIAL*/
     height: 100%;
-    overflow: visible;
+    overflow: none;
   }
 
   .add-note {
@@ -343,6 +367,23 @@
     margin-top: 20px;
   }
 
+  .input-group {
+    background: gray;
+  }
+
+  .upload-wrapper {
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px dashed var(--border-primary);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .field-label {
+    font-size: 0.85em;
+    color: var(--text-muted);
+  }
+
   .panel-buttons {
     margin-top: 25px;
   }
@@ -398,7 +439,7 @@
 
   .cat-picker-trigger:hover { color: white; }
 
-  /* ── Picker popover ── */
+  /* ======================== PICKER POPOVER ========================= */
   .cat-picker-popover {
     position: absolute;
     top: 10px;

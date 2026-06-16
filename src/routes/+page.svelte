@@ -18,6 +18,7 @@
   import ImportModal from '../lib/ImportModal.svelte';
   import TimeoutModal from '../lib/TimeoutModal.svelte';
   import ThemePicker from '$lib/ThemePicker.svelte';
+  import ImageViewerModal from '../lib/ImageViewerModal.svelte';
   import { themes, applyTheme, loadSavedTheme } from '../lib/themes.js';
   import LockScreenPicker from '../lib/LockScreenPicker.svelte';
   import '../lib/app.css';
@@ -33,6 +34,7 @@
 //================== Lucide Imports ==================//
 
   import Key from '@lucide/svelte/icons/key';
+  import Eye from '@lucide/svelte/icons/eye';
   import Bug from '@lucide/svelte/icons/bug';
   import Tags from '@lucide/svelte/icons/tags';
   import Flag from '@lucide/svelte/icons/flag';
@@ -226,6 +228,9 @@
   let showForcePrompt = false;
   let selectedBreachStatus = 'Unknown';
   let cursorPosition = 0;
+  let showViewer = false;
+  let viewerImageSrc = '';
+  let viewerTitle = '';
 
   let showNerdPanel = false;
   let currentTimeout = 0;
@@ -446,6 +451,23 @@ $: if (totpStatus === 'setup') {
 
 
 // ----------------------------- FUNCTIONS ---------------------------------- //
+
+
+function triggerImageViewer(sourceData) {
+  if (!sourceData) {
+    setMessage("No image attachment available for this service.", false, true);
+    return;
+  }
+
+  // Set the image source destination payload
+  viewerImageSrc = sourceData;
+  
+  // Look for your direct reactive state variable for the service name
+  viewerTitle = (typeof selectedService !== 'undefined' ? selectedService : '') || "Secure Attachment";
+  
+  // Open the view modal layer
+  showViewer = true;
+}
 
 
 function getCategoryApplied(cat) {
@@ -2695,6 +2717,27 @@ setFavoritesAll: (newSet) => {
 
           <div class="service-specific-settings">
             <button 
+              class="view-image-btn"
+              on:click={() => {
+                // Parse the attachment string safely out of your note field
+                try {
+                  const parsed = JSON.parse(selectedNote);
+                  if (parsed && parsed.attachment) {
+                    triggerImageViewer(parsed.attachment);
+                  } else {
+                    // Fallback to checking the standard IconPath if note isn't structured
+                    triggerImageViewer(selectedIconPath);
+                  }
+                } catch(e) {
+                  // If plain text, check if icon path handles it
+                  triggerImageViewer(selectedIconPath);
+                }
+              }}
+            >
+              <Eye size={30} strokeWidth={1.2} class="eye"/>
+            </button>
+
+            <button 
             class="cog-trigger"
             on:click={() => openActionMenu = !openActionMenu}
             on:click={() => showServiceOverlay = !showServiceOverlay}
@@ -3573,6 +3616,13 @@ setFavoritesAll: (newSet) => {
   }}
 />
 
+<ImageViewerModal 
+  {showViewer} 
+  imageSrc={viewerImageSrc} 
+  serviceName={viewerTitle} 
+  on:close={() => showViewer = false} 
+/>
+
 <SearchModal
   bind:showSearchModal
   bind:highlightedIndex
@@ -4179,11 +4229,32 @@ setFavoritesAll: (newSet) => {
     position: absolute;
     display: flex;
     flex-direction: column;
+    gap: 20px;
     align-items: center;
     width: 45px;
-    height: 115px;
+    height: 185px;
     bottom: 0;
     margin-bottom: 30px;
+  }
+
+  .view-image-btn {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-secondary, #2a2a2a);
+    border: 1px solid var(--border-primary, #444);
+    color: var(--text-primary, #fff);
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: 5px;
+  }
+
+  .view-image-btn:hover {
+    background: var(--accent-color, #4caf50);
+    border-color: transparent;
+    transform: translateY(-1px);
   }
 
   .cog-icon {
@@ -4207,7 +4278,7 @@ setFavoritesAll: (newSet) => {
     bottom:0;
     border-radius: 8px;
     margin:10px 50px 0;
-    padding-top:5px;
+    padding-top: 5px;
     font-size: 25px;
   }
 
