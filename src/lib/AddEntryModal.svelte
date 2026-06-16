@@ -281,15 +281,17 @@
   }
 
   .add-entry-form {
-    border: 1px solid #666;
+    border: 1px solid #333;
     border-radius: 6px;
     background: rgba(100, 100, 100, 0.3);
     padding: 50px 85px 10px;
+    gap: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;/*ESSENTIAL*/
     height: 100%;
-    overflow: none;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .add-note {
@@ -368,18 +370,28 @@
   }
 
   .input-group {
-    background: gray;
+    border-top: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 
   .upload-wrapper {
-    margin-top: 8px;
-    padding: 10px;
+    margin-top: 50px;
     border: 1px dashed var(--border-primary);
     border-radius: 6px;
     background: rgba(0, 0, 0, 0.1);
   }
 
   .field-label {
+    background-color: rgba(100, 100, 100, 0.2);
+    border-radius: 6px;
+    position: relative;
+    padding: 5px;
+    margin-top: 15px;
+    width: 100%;
+    left: -5px;
+    text-align: center;
     font-size: 0.85em;
     color: var(--text-muted);
   }
@@ -469,7 +481,6 @@
     top: 4px;
     right: 8px;
   }
-
 
   .cat-picker-title {
     font-size: 1em;
