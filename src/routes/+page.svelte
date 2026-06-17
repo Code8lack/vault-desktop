@@ -2787,7 +2787,7 @@ setFavoritesAll: (newSet) => {
               <div class="nerd-stats">
                 <div class="stats-banner">
                   <div class="label">Nerd Stats</div>
-                  <button class="menu-close"
+                  <button class="panel-close"
                   on:click={() => {
                   showNerdPanel = false;
                   localStorage.setItem('nerdPanelActive', 'false'); 
@@ -2962,7 +2962,7 @@ setFavoritesAll: (newSet) => {
               transition:fly={{ x: -280, duration: 300, opacity: 1 }}
             >
               <button
-                class="menu-close"
+                class="menu-close circle-close"
                 aria-label="Close menu"
                 on:click={closeMenu}
               >
@@ -3280,7 +3280,7 @@ setFavoritesAll: (newSet) => {
   <div class="display-panel-order delete">
     <div class="display-panel" style="border-color: #666;">
       <button
-        class="panel-close delete-x"
+        class="circle-close delete-x"
         type="button"
         aria-label="Close panel"
         on:click={() => showDeletePanel = false}
@@ -3613,7 +3613,7 @@ setFavoritesAll: (newSet) => {
   {handlePasswordPaste}
   validationError={validationError}
   feedbackMessage={feedbackMessage}
-  closeBtnClass="menu-close" on:close={() => {
+  closeBtnClass="circle-close" on:close={() => {
     showAddEntryPanel = false;
     editMode = false;
     editingServiceName = '';
@@ -4445,7 +4445,7 @@ setFavoritesAll: (newSet) => {
   }
 
 /* ↓ Changed: both selectors wrapped in :global() so child buttons receive these styles */
-:global(.menu-close) {
+:global(.circle-close) {
     align-self: flex-end;
     background: transparent;
     border: none;
@@ -4459,7 +4459,7 @@ setFavoritesAll: (newSet) => {
     justify-content: center;
     margin-bottom: 20px;
   }
-  :global(.menu-close:hover) {
+  :global(.circle-close:hover) {
     background: var(--bg-secondary);
     border: 1px solid var(--border-primary);
     color: rgba(245, 15, 15, 1); 
@@ -4689,8 +4689,8 @@ setFavoritesAll: (newSet) => {
   }
 
   .delete-x{
-    top: 10px;
-    margin-right: -25px;
+    margin-top: -20px;
+    margin-right: -20px;
   }
 
   .delete .panel-buttons{
@@ -4720,6 +4720,12 @@ setFavoritesAll: (newSet) => {
     text-align: center;
     padding: 5px;
     height: 30px;
+  }
+
+  .stats-banner .panel-close {
+    top: -30px;
+    right: 25px;
+    width: 15px;
   }
 
   .nerd-stats button{
