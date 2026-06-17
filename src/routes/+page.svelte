@@ -231,6 +231,7 @@
   let showViewer = false;
   let viewerImageSrc = '';
   let viewerTitle = '';
+  let showImageViewerModal = false;
 
   let showNerdPanel = false;
   let currentTimeout = 0;
@@ -337,7 +338,7 @@ $: if (searchResults) {
   collapsed = false;
 }
 
-$: modalOpen = showBackupModal || showSecurityModal || showSearchModal || showAddEntryPanel || showDeletePanel;
+$: modalOpen = showBackupModal || showSecurityModal || showSearchModal || showAddEntryPanel || showDeletePanel || showViewer;
 
 
 /* ============================================================================================= */
@@ -3624,7 +3625,7 @@ setFavoritesAll: (newSet) => {
   {showViewer} 
   imageSrc={viewerImageSrc} 
   serviceName={viewerTitle} 
-  on:close={() => showViewer = false} 
+  on:close={() => showViewer = false}
 />
 
 <SearchModal
