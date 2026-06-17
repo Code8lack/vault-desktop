@@ -2240,10 +2240,8 @@ setFavoritesAll: (newSet) => {
                 bind:value={displayPassword}
                 on:focus={() => { isFocused = true; }}
                 on:click={() => { 
-                  // If not empty and you want to toggle, keep this, 
-                  // but ensure it doesn't block focus
                   if (displayPassword !== '') {
-                    // Logic for toggling peek
+                     peekPassword = true;
                   }
                   maskedInputEl?.focus(); 
                 }}
