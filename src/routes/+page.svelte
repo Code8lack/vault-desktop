@@ -2239,13 +2239,13 @@ setFavoritesAll: (newSet) => {
                 class="input"
                 bind:this={maskedInputEl}
                 bind:value={displayPassword}
-                on:focus={() => { isFocused = true; }}
                 on:click={() => { 
                   if (displayPassword !== '') {
                      peekPassword = true;
                   }
                   maskedInputEl?.focus(); 
                 }}
+                on:input={() => { isFocused = true; }}
                 on:input={handleMasterPasswordInput}
                 on:blur={() => { isFocused = false; startMasking(); }}
                 on:keydown={(e) => { if (e.key === 'Enter') { flashBtn('verify'); verifyPassword(); } }}
