@@ -1002,7 +1002,7 @@ function persistentFocus(node, isBlocked) {
     showTotpModal       = false;
     showForcePassword   = false;
     showSearchModal     = false;
-
+    showViewer          = false;
 
     // Clear sensitive form fields
     newServiceName = '';
