@@ -56,12 +56,14 @@ All sensitive data is encrypted and protected using industry-standard methods.
 ## Recently Completed
 - **Category assignment** — organisational grouping of vault entries
 - **Theme search** — themes surfaced in app-wide search with full keyboard navigation
+- **Image addition** — attaching images to vault entries
+- **Lucide Icons** - ...to replace system emojis
+
+
 
 ## In Development
 - **Nerd Stats carousel** — expanding the current password strength stat into a rotating panel of vault analytics
-- **Image addition** — attaching images to vault entries
 - **Silo Mode** - Cloud stash functionality
-- **Custom Icons** - ...to replace system emojis
 ---
 
 ## Testing & Development Status
