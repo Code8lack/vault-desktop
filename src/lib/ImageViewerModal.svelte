@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   export let showViewer: boolean = false;
   export let imageSrc: string = '';
   export let serviceName: string = 'Attachment';
@@ -9,14 +9,40 @@
   function close() {
     dispatch('close');
   }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      close();
+    }
+  }
+
+  // Focus management for modal
+  let modalContent: HTMLElement;
+  onMount(() => {
+    if (showViewer && modalContent) {
+      modalContent.focus();
+    }
+  });
 </script>
 
 {#if showViewer}
-  <div class="modal-overlay" on:click|self={close}>
-    <div class="modal-content">
+  <div 
+    class="modal-overlay" 
+    on:click|self={close}
+    on:keydown={handleKeydown}
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    tabindex="-1"
+  >
+    <div 
+      class="modal-content" 
+      bind:this={modalContent}
+      tabindex="-1"
+    >
       <div class="modal-header">
-        <h3>{serviceName} - Secure Viewer</h3>
-        <button class="close-btn" on:click={close}>&times;</button>
+        <h3 id="modal-title">{serviceName} - Secure Viewer</h3>
+        <button class="close-btn" on:click={close} aria-label="Close viewer">&times;</button>
       </div>
       <div class="image-container">
         {#if imageSrc}
@@ -50,6 +76,7 @@
     max-width: 600px;
     padding: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    outline: none;
   }
   .modal-header {
     display: flex;
