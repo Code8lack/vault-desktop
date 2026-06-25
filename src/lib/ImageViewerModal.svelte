@@ -117,6 +117,7 @@
           <img 
             src={imageSrc} 
             alt="Secure Wallet Attachment" 
+            draggable="false"
             style="transform: translate({translateX}px, {translateY}px) scale({scale});"
           />
         {:else}
@@ -188,6 +189,8 @@
     max-height: 65vh;
     object-fit: contain;
     transition: transform 0.15s ease-out;
+    user-select: none;
+    -webkit-user-drag: none;
   }
   .image-container.dragging img {
     transition: none;
