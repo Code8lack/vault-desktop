@@ -6,7 +6,26 @@
 
   const dispatch = createEventDispatcher();
 
+  // Zoom/pan state
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let didDrag = false;
+
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 4;
+
+  function resetZoom() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+  }
+
   function close() {
+    resetZoom();
     dispatch('close');
   }
 
@@ -14,6 +33,46 @@
     if (event.key === 'Escape') {
       close();
     }
+  }
+
+  function handleWheel(event: WheelEvent) {
+    event.preventDefault();
+    const delta = event.deltaY < 0 ? 0.25 : -0.25;
+    const next = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+    scale = next;
+    if (scale === MIN_SCALE) {
+      translateX = 0;
+      translateY = 0;
+    }
+  }
+
+  function handleMouseDown(event: MouseEvent) {
+    if (scale === MIN_SCALE) return;
+    isDragging = true;
+    didDrag = false;
+    dragStartX = event.clientX - translateX;
+    dragStartY = event.clientY - translateY;
+  }
+
+  function handleMouseMove(event: MouseEvent) {
+    if (!isDragging) return;
+    didDrag = true;
+    translateX = event.clientX - dragStartX;
+    translateY = event.clientY - dragStartY;
+  }
+
+  function handleMouseUp() {
+    isDragging = false;
+  }
+
+  // Guards the overlay's click-to-close so a drag that ends outside
+  // the modal doesn't get misread as a click-to-close
+  function handleOverlayClick(event: MouseEvent) {
+    if (didDrag) {
+      didDrag = false;
+      return;
+    }
+    close();
   }
 
   // Focus management for modal
@@ -28,7 +87,7 @@
 {#if showViewer}
   <div 
     class="modal-overlay" 
-    on:click|self={close}
+    on:click|self={handleOverlayClick}
     on:keydown={handleKeydown}
     role="dialog"
     aria-modal="true"
@@ -44,9 +103,22 @@
         <h3 id="modal-title">{serviceName} - Secure Viewer</h3>
         <button class="close-btn" on:click={close} aria-label="Close viewer">&times;</button>
       </div>
-      <div class="image-container">
+      <div 
+        class="image-container"
+        class:zoomed={scale > MIN_SCALE}
+        class:dragging={isDragging}
+        on:wheel={handleWheel}
+        on:mousedown={handleMouseDown}
+        on:mousemove={handleMouseMove}
+        on:mouseup={handleMouseUp}
+        on:mouseleave={handleMouseUp}
+      >
         {#if imageSrc}
-          <img src={imageSrc} alt="Secure Wallet Attachment" />
+          <img 
+            src={imageSrc} 
+            alt="Secure Wallet Attachment" 
+            style="transform: translate({translateX}px, {translateY}px) scale({scale});"
+          />
         {:else}
           <p class="no-image">No attachment or image found for this entry.</p>
         {/if}
@@ -105,10 +177,20 @@
     border-radius: 6px;
     background: #0d0d0d;
   }
+  .image-container.zoomed {
+    cursor: grab;
+  }
+  .image-container.zoomed.dragging {
+    cursor: grabbing;
+  }
   img {
     max-width: 100%;
     max-height: 65vh;
     object-fit: contain;
+    transition: transform 0.15s ease-out;
+  }
+  .image-container.dragging img {
+    transition: none;
   }
   .no-image {
     color: var(--text-muted, #888);
