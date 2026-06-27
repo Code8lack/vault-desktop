@@ -2240,6 +2240,7 @@ setFavoritesAll: (newSet) => {
                 bind:this={maskedInputEl}
                 bind:value={displayPassword}
                 on:click={() => { 
+                  isFocused = true;//CODE:RED for correct input field click action.
                   if (displayPassword !== '') {
                      peekPassword = true;
                   }
