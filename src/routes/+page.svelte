@@ -238,6 +238,10 @@
   let lockBg = '';
   let lockContrastMode = 'dark';
 
+  let backupMessage = '';
+  let persistentBackup = false;
+  let backupTimer;
+
 
 //=============================== REACTIVES =========================================//
 
@@ -796,6 +800,18 @@ function persistentFocus(node, isBlocked) {
       }, DEFAULT_MSG_DURATION);
       if (isError) errorTimer = timerId;
       else msgTimer = timerId;
+    }
+  }
+
+  // ☁️ Backup Message Controller (independent of lock/error notifications)
+  function setBackupMessage(msg, isPersistent = false) {
+    clearTimeout(backupTimer);
+    backupMessage = msg;
+    persistentBackup = isPersistent;
+    if (!isPersistent && msg !== '') {
+      backupTimer = setTimeout(() => {
+        backupMessage = '';
+      }, DEFAULT_MSG_DURATION);
     }
   }
 
@@ -3190,6 +3206,11 @@ setFavoritesAll: (newSet) => {
       <div class="error" transition:fade={{ duration: 300 }}>{errorMessage}</div>
     {:else if infoMessage}
       <div class="info-alert" transition:fade={{ duration: 300 }}><div>{infoMessage}</div></div>
+    {/if}
+  {/key}
+  {#key backupMessage}
+    {#if backupMessage}
+      <div class="info-alert" transition:fade={{ duration: 300 }}><div>{backupMessage}</div></div>
     {/if}
   {/key}
 </div>
