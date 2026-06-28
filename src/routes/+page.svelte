@@ -2114,6 +2114,7 @@ onDestroy(() => {
 <div use:setupMainListener={{ 
   clearAuthTimeout, 
   setMessage,
+  setBackupMessage,
   getPendingServiceRename: () => pendingServiceRename,
   clearPendingServiceRename: () => { pendingServiceRename = null; },
   //setSelectedService: (v) => { selectedService = v; },
