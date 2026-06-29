@@ -1043,8 +1043,9 @@ function persistentFocus(node, isBlocked) {
   }
 
   function clearMessages() {
-    infoMessage = null
+    infoMessage = null;
     errorMessage = null;
+    backupMessage = null;
   }
 
   function startChange() {
@@ -3211,7 +3212,7 @@ setFavoritesAll: (newSet) => {
   {/key}
   {#key backupMessage}
     {#if backupMessage}
-      <div class="info-alert" transition:fade={{ duration: 300 }}><div>{backupMessage}</div></div>
+      <div class="info-alert backup-info" transition:fade={{ duration: 300 }}><div>{backupMessage}</div></div>
     {/if}
   {/key}
 </div>
@@ -5308,6 +5309,10 @@ setFavoritesAll: (newSet) => {
     border-radius: 8px;
     margin: 10px 0 -110px;
     z-index: 99;
+  }
+
+  .backup-info {
+    margin: 20px 0 -20px;
   }
 
   .message-container.totp-open {
