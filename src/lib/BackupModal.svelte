@@ -51,10 +51,10 @@
         provider,
         endpoint,
         username,
-        backupPassword,
-        accessKey,     
-        secretKey,     
-        bucket,        
+        backupPassword !== '' ? backupPassword : '__unchanged__',
+        accessKey,
+        secretKey !== '' ? secretKey : '__unchanged__',
+        bucket,
         retention,
         encrypt
       ].join('|');
