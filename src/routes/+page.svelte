@@ -364,6 +364,10 @@ $: if (totpStatus === 'setup') {
   copiedItems = new Set();
 }
 
+$: isPostAuth = authMode === 'authenticated';
+
+
+
 
 // ===================================== CONSTANTS ========================================= //
 
@@ -2195,7 +2199,9 @@ setFavoritesAll: (newSet) => {
   on:mousemove={sendKeepAlive}
   style={isPreAuth && lockBg ? `background-image: url('${lockBg}')` : ''}
   class:list-view={authMode === 'authenticated' && selectedService === null}
-  class:locked-screen={isPreAuth}>
+  class:locked-screen={isPreAuth}
+  class:post-auth={isPostAuth}>
+
 
   <!--style={lockBg ? `background-image: url('${lockBg}')` : ''}-->
   <div class={isHeaderList ? "header-list" : "header-item"}></div>
@@ -2462,7 +2468,7 @@ setFavoritesAll: (newSet) => {
     </div>
   {/if}
 
-  <!-- ============================ AUTHENTICATED ============================ -->
+  <!-- ========================================= AUTHENTICATED/UNLOCKED ====================================== -->
 
       {#if authMode === 'authenticated'}
         <div class="row button-wrapper {headerMinimized ? 'left' : ''}" class:minimized={headerMinimized} style="margin-top: 10px;">
@@ -3212,7 +3218,9 @@ setFavoritesAll: (newSet) => {
   {/key}
   {#key backupMessage}
     {#if backupMessage}
-      <div class="info-alert backup-info" transition:fade={{ duration: 300 }}><div>{backupMessage}</div></div>
+      <div class="info-alert backup-info" 
+      class:backup-info-post={isPostAuth}
+      transition:fade={{ duration: 300 }}><div>{backupMessage}</div></div>
     {/if}
   {/key}
 </div>
@@ -5313,6 +5321,12 @@ setFavoritesAll: (newSet) => {
 
   .backup-info {
     margin: 20px 0 -20px;
+  }
+
+  /* Post-auth specific styling */
+  /*.post-auth .backup-info,*/
+  .backup-info-post {
+    top: 30px;
   }
 
   .message-container.totp-open {
