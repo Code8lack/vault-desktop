@@ -103,7 +103,14 @@
           </label>
           <label>
             Bucket
-            <input type="text" bind:value={bucket} placeholder="my-vault-bucket" />
+            <input 
+              type="text" 
+              bind:value={bucket} 
+              placeholder="my-vault-bucket"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
           </label>
         {:else}
           <label>
