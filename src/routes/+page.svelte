@@ -5326,6 +5326,7 @@ setFavoritesAll: (newSet) => {
   /* Post-auth specific styling */
   /*.post-auth .backup-info,*/
   .backup-info-post {
+    visibility: hidden;
     top: 30px;
   }
 
